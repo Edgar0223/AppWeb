@@ -1,0 +1,91 @@
+{% extends "./home.html" %}
+
+{% block tittle %}Registro de usuarios {% endblock %}
+{% block body %}
+
+<head>
+    <!-- links para exportar a excel -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+</head>
+<div class="row">
+    <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-dismissible alert-success" id="alert-message">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="text-dark">{{ message }}</strong>
+        </div>
+        <script>
+            setTimeout(function() {
+                document.getElementById('alert-message').style.display = 'none';
+            }, 1000); // Cierra el mensaje después de 5 segundos (5000 milisegundos)
+        </script>
+        {% endfor %}
+        {% endif %}
+        
+        <h2>Registro </h2>
+        <div class="card">
+            <div class="card-body" style="text-align: center;"> 
+              <form action="{% url 'registro' %}" method="POST" class="">
+                {% csrf_token %}
+                <img src="/static/img/a.png" alt="" width="100" height="60">
+                <div class="form-group py-1">
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Usuario" required>
+                    <div  class="form-text">ingrese un usuario valido.</div>
+
+                </div><br>
+                <div class="form-group">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Contrseña" required>
+                    <div id="emailHelp" class="form-text">ingrese una contraseña de 8 caracteres.</div>
+
+                </div><br>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Correo" required>
+                    <div id="emailHelp" class="form-text">ingrese un correo de contacto</div>
+
+                </div><br>
+                <div class="form-group py-1">
+                    <input type="text" id="rol_id" name="rol_id" class="form-control" placeholder="Número de Rol" required>
+                    <div  class="form-text"><ol>
+                    <li>Administrador</li>
+                    <li>Supervisor</li>
+                    <li>Producción</li>
+                    <li>Recepción</li></ol></div>
+                </div><br>
+                <button type="submit" class="btn btn-primary">Registrar</button>
+
+            </form>
+
+          </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- script para exportar a excel -->
+<script>
+    const $btnExportar = document.querySelector("#btnExportar"),
+        $tabla = document.querySelector("#tabla");
+
+    $btnExportar.addEventListener("click", function() {
+        const currentDate = new Date();
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const year = currentDate.getFullYear();
+
+        let tableExport = new TableExport($tabla, {
+            exportButtons: false, // No queremos botones
+            filename: `Empleados ${day}-${month}-${year}`, // Nombre del archivo de Excel con la fecha actual en formato dd-mm-aaaa
+            sheetname: 'Registro de empleados', // Título de la hoja
+        });
+
+        let datos = tableExport.getExportData();
+        let preferenciasDocumento = datos.tabla.xlsx;
+        tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+    });
+</script>
+
+
+{% endblock %}

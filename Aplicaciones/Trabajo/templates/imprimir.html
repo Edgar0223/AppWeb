@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de Impresión</title>
+    <style>
+        /* Estilos para la hoja de impresión */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .encabezado {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+        .encabezado h1 {
+            font-size: 24px;
+            margin: 0;
+            padding-bottom: 5px;
+        }
+        .encabezado p {
+            margin: 0;
+        }
+        .tabla-datos {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tabla-datos th, .tabla-datos td {
+            padding: 10px;
+            border: 1px solid #000;
+            text-align: center;
+        }
+        .tabla-datos th {
+            background-color: #E05012;
+            color: #fff;
+        }
+        .tabla-datos tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .firmas {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .firmas p {
+            display: inline-block;
+            margin: 0 20px; /* Incrementamos el margen horizontal */
+            position: relative;
+            font-size: 14px; /* Tamaño de fuente reducido */
+        }
+        .firmas p span {
+            font-size: 12px; /* Tamaño de fuente reducido */
+            position: absolute;
+            bottom: -20px; /* Ajustamos la posición debajo de la línea */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .comentarios {
+            margin-top: 20px;
+        }
+        .comentarios textarea {
+            width: 98%;
+            min-height: 100px;
+            padding: 10px;
+            resize: vertical;
+        }
+        .pie-pagina {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="encabezado">
+        <img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+        <h1>IMFORME DE KILOS LIBERADOS</h1>
+        <br>
+        <p><strong>Fecha:</strong> {{ fecha }}</p>
+        <p><strong>Cliente:</strong> {{ cliente }}</p>
+        <p><strong>Productos:</strong> {{ productos }}</p>
+        <p><strong>Lote:</strong> {{ lote }}</p>
+    </div>
+    <table class="tabla-datos">
+        <thead>
+            <tr>
+                <th>Hora</th>
+                <th>No.Tarima</th>
+                <th>Lote Tarima</th>
+                <th>Cantidad</th>
+                <th>Kilos</th>
+                <th>Kilos Netos</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fis in fis_list %}
+            <tr>
+                <td>{{ fis.hora }}</td>
+                <td>{{ fis.nTarima }}</td>
+                <td>{{ fis.loTarima }}</td>
+                <td>{{ fis.cantidad }}</td>
+                <td>{{ fis.kg }}</td>
+                <td>{{ fis.kgNetos }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3"><strong>Total:</strong></td>
+                <td>{{ total_cantidad }}</td>
+                <td>{{ total_kg }}</td>
+                <td>{{ total_kg_netos }}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Espacio para comentarios -->
+    <div class="comentarios">
+        <h2>Comentarios:</h2>
+        <textarea name="comentarios" id="comentarios" placeholder="Escribe tus comentarios aquí"></textarea>
+    </div>
+    <!-- Espacios para firmas -->
+    <div class="firmas">
+        <br>
+        <p>
+            <span>{{usuario}}</span>
+            <br>
+            _________________________________
+            
+        </p>
+        
+        
+    </div>
+    <div class="pie-pagina">
+        En Alimentos y Frutas de Chaparaco S.P.R. de R.L. de C.V. procesamos alimentos que satisfacen las necesidades de nuestros clientes 
+        tanto internos como externos, mediante los estándares de calidad de las normas aplicadas, garantizando la inocuidad, seguridad y
+        legalidad de nuestros productos a través de la mejora continua.
+    </div>
+</body>
+</html>

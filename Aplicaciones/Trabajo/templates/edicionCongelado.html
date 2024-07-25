@@ -1,0 +1,139 @@
+{% extends "./home.html" %}
+
+{% block tittle %}Gestion Fruta{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h2>Edicion de la fruta lavada</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="" method="POST">{% csrf_token %}
+                    <div class="form-group py-2">
+                        <input type="text" id="lote"  name="lote" value="{{fruta.lote}}" class="form-control" placeholder="Lote"
+                         readonly required >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Selecciona la fruta:</strong></label>
+                        <select type="text" id="nombre" name="nombre" class="form-control" required>
+                            <option value="Fresa" {% if fruta.nombre == 'Fresa' %}selected{% endif %}>Fresa</option>
+                            <option value="FresaCubo" {% if fruta.nombre == 'FresaCubo' %}selected{% endif %}>FresaCubo</option>
+                            <option value="FresaSortOut" {% if fruta.nombre == 'FresaSortOut' %}selected{% endif %}>FresaSortOut</option>
+                            <option value="FresaFieldRun" {% if fruta.nombre == 'FresaFieldRun' %}selected{% endif %}>FresaFieldRun</option>
+                            <option value="FresaPareja" {% if fruta.nombre == 'FresaPareja' %}selected{% endif %}>FresaPareja</option>
+                            <option value="FresaMediana" {% if fruta.nombre == 'FresaMediana' %}selected{% endif %}>FresaMediana</option>
+                            <option value="Mango" {% if fruta.nombre == 'Mango' %}selected{% endif %}>Mango</option>
+                            <option value="MangoTirilla" {% if fruta.nombre == 'MangoTirilla' %}selected{% endif %}>MangoTirilla</option>
+                            <option value="MangoCubo" {% if fruta.nombre == 'MangoCubo' %}selected{% endif %}>MangoCubo</option>
+                            <option value="MangoCachete" {% if fruta.nombre == 'MangoCachete' %}selected{% endif %}>MangoCachete</option>
+                            <option value="MangoChunk" {% if fruta.nombre == 'MangoChunk' %}selected{% endif %}>MangoChunk</option>
+                            <option value="Piña" {% if fruta.nombre == 'Piña' %}selected{% endif %}>Piña</option>
+                            <option value="PiñaCubo" {% if fruta.nombre == 'PiñaCubo' %}selected{% endif %}>PiñaCubo</option>
+                            <option value="PiñaChunk" {% if fruta.nombre == 'PiñaChunk' %}selected{% endif %}>PiñaChunk</option>
+                            <option value="PiñaTroso" {% if fruta.nombre == 'PiñaTroso' %}selected{% endif %}>PiñaTroso</option>
+                            <option value="Arandano" {% if fruta.nombre == 'Arandano' %}selected{% endif %}>Arandano</option>
+                            <option value="Zarzamora" {% if fruta.nombre == 'Zarzamora' %}selected{% endif %}>Zarzamora</option>
+                            <option value="Frambuesa" {% if fruta.nombre == 'Frambuesa' %}selected{% endif %}>Frambuesa</option>
+                            <option value="FRESA CHICA IQF" {% if fruta.nombre == 'FRESA CHICA IQF' %}selected{% endif %}>FRESA CHICA IQF</option>
+                            <option value="FRESA ENTERA IQF" {% if fruta.nombre == 'FRESA ENTERA IQF' %}selected{% endif %}>FRESA ENTERA IQF</option>
+                            <option value="FRESA HARVEST IQF" {% if fruta.nombre == 'FRESA HARVEST IQF' %}selected{% endif %}>FRESA HARVEST IQF</option>
+                            <option value="FRESA MEDIANA IQF" {% if fruta.nombre == 'FRESA MEDIANA IQF' %}selected{% endif %}>FRESA MEDIANA IQF</option>
+                            <option value="FRESA MEDIANA MONARCH" {% if fruta.nombre == 'FRESA MEDIANA MONARCH' %}selected{% endif %}>FRESA MEDIANA MONARCH</option>
+                            <option value="FRESA PURE" {% if fruta.nombre == 'FRESA PURE' %}selected{% endif %}>FRESA PURE</option>
+                            <option value="FRESA SORT OUT IQF" {% if fruta.nombre == 'FRESA SORT OUT IQF' %}selected{% endif %}>FRESA SORT OUT IQF</option>
+                            <option value="MANGO CHUNKS IQF" {% if fruta.nombre == 'MANGO CHUNKS IQF' %}selected{% endif %}>MANGO CHUNKS IQF</option>
+                            <option value="ZARZAMORA IQF" {% if fruta.nombre == 'ZARZAMORA IQF' %}selected{% endif %}>ZARZAMORA IQF</option>
+                            <option value="PIÑA CHUNK IQF" {% if fruta.nombre == 'PIÑA CHUNK IQF' %}selected{% endif %}>PIÑA CHUNK IQF</option>
+                            <option value="FRAMBUESA ORG IQF" {% if fruta.nombre == 'FRAMBUESA ORG IQF' %}selected{% endif %}>FRAMBUESA ORG IQF</option>
+                            <option value="ARANDANO IQF" {% if fruta.nombre == 'ARANDANO IQF' %}selected{% endif %}>ARANDANO IQF</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="text" id="kg"  name="kg" value="{{fruta.kg}}" class="form-control" placeholder="kg"
+                         required >
+                    </div>
+                    <div class="form-group py-2">
+                        <input type="text" id="cajas"  name="cajas" value="{{fruta.cajas}}" class="form-control" placeholder="cajas"
+                         required >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Selecciona el tipo de caja:</strong></label>
+                        <select type="text" id="tipoCaja" name="tipoCaja" class="form-control" required>
+                            <option value="Proveedora" {% if fruta.tipoCaja == 'Proveedora' %}selected{% endif %}>Proveedora</option>
+                            <option value="Tijuana" {% if fruta.tipoCaja == 'Tijuana' %}selected{% endif %}>Tijuana</option>
+                            <option value="Colima" {% if fruta.tipoCaja == 'Colima' %}selected{% endif %}>Colima</option>
+                            <option value="Lima" {% if fruta.tipoCaja == 'Lima' %}selected{% endif %}>Lima</option>
+                            <option value="Jacona" {% if fruta.tipoCaja == 'Jacona' %}selected{% endif %}>Jacona</option>
+                            <option value="Regilla" {% if fruta.tipoCaja == 'Regilla' %}selected{% endif %}>Regilla</option>
+                            <option value="Morelia" {% if fruta.tipoCaja == 'Morelia' %}selected{% endif %}>Morelia</option>
+                            <option value="enfriado" {% if fruta.tipoCaja == 'enfriado' %}selected{% endif %}>enfriado</option>
+                            <option value="Saltillo" {% if fruta.tipoCaja == 'Saltillo' %}selected{% endif %}>Saltillo</option>
+                            <option value="bote" {% if fruta.tipoCaja == 'bote' %}selected{% endif %}>bote</option>
+                            <option value="caja30lb" {% if fruta.tipoCaja == 'caja30lb' %}selected{% endif %}>caja30lb</option>
+                            <option value="caja20lb" {% if fruta.tipoCaja == 'caja20lb' %}selected{% endif %}>caja20lb</option>
+                            <option value="caja10lb" {% if fruta.tipoCaja == 'caja10lb' %}selected{% endif %}>caja10lb</option>
+                            <option value="caja20kg" {% if fruta.tipoCaja == 'caja20kg' %}selected{% endif %}>caja20kg</option>
+                            <option value="caja12lb" {% if fruta.tipoCaja == 'caja12lb' %}selected{% endif %}>caja12lb</option>
+                            <option value="cubeta12kg" {% if fruta.tipoCaja == 'cubeta12kg' %}selected{% endif %}>cubeta12kg</option>
+                            <option value="botecito-6.5lb" {% if fruta.tipoCaja == 'botecito-6.5lb' %}selected{% endif %}>botecito-6.5lb</option>
+                            <option value="caja0" {% if fruta.tipoCaja == 'caja0' %}selected{% endif %}>SinCaja</option>
+                        </select>
+                    </div>
+                    <div class="form-group py-2">
+                        <input type="text" id="kgDesp"  name="kgDesp" value="{{fruta.kgDesp}}" class="form-control" placeholder="Kilos de desperdicio"
+                         required >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Selecciona el tipo de tarima:</strong></label>
+                        <select type="text" id="tarima" name="tarima" class="form-control" required>
+                            <option value="Madera" {% if fruta.tarima == 'Madera' %}selected{% endif %}>Madera</option>
+                            <option value="Plastico" {% if fruta.tarima == 'Plastico' %}selected{% endif %}>Plastico</option>
+                            <option value="Metal" {% if fruta.tarima == 'Metal' %}selected{% endif %}>Metal</option>
+                        </select>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Cliente:</strong></label>
+                        <input type="text" id="cliente"  name="cliente" value="{{fruta.cliente}}" class="form-control" placeholder="Cliente" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Fecha:</strong></label>
+                        <input type="datetime-local" id="horaEnvio" name="horaEnvio" value="{{fruta.horaEnvio}}" class="form-control" placeholder="Fecha"
+                          maxlength="50" readonly required >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Hora:</strong></label>
+                        <input type="datetime-local" id="hora" name="hora" value="{{fruta.hora}}" class="form-control" placeholder="Fecha"
+                          maxlength="50" readonly required >
+                    </div>
+                    <div class="form-group py-2">
+                        <button type="submit" class="btn btn-success btn-block ext-white">Guardar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    // Obtener la fecha actual
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
+    var year = today.getFullYear();
+
+    // Obtener la hora actual
+    var hours = today.getHours();
+    var minutes = today.getMinutes();
+
+    // Formatear la fecha y hora actual
+    var formattedDate = year + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+    var formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+    // Establecer la fecha y hora actual en el campo de horaEnvio
+    document.getElementById("horaEnvio").value = formattedDate;
+    document.getElementById("hora").value =  formattedTime;
+</script>
+{% endblock %}

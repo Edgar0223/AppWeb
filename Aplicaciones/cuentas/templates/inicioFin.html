@@ -1,0 +1,161 @@
+{% extends "./finanzas.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}Gestión Proveedores{% endblock %}
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Panel de Control de Contabilidad</h1>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+
+    <!-- Tarjetas de resumen -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-center mb-4 bg-success shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <i class="bi bi-cash-stack display-6"></i>
+                    </div>
+                    <h5 class="card-title">Egresos Proveedores</h5>
+                    <p class="card-text display-6">${{ contabilidad_total|floatformat:2|intcomma }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-center mb-4 bg-warning shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <i class="bi bi-cash display-6"></i>
+                    </div>
+                    <h5 class="card-title">Egresos Agricultores</h5>
+                    <p class="card-text display-6">${{ Nota_total|floatformat:2|intcomma }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center mb-4 bg-secondary shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <i class="bi bi-people-fill display-6"></i>
+                    </div>
+                    <h5 class="card-title">Proveedores Activos</h5>
+                    <p class="card-text display-6">{{ total_registros }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center mb-6 bg-primary shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-center mb-2">
+                        <i class="bi bi-exclamation-triangle-fill display-6"></i>
+                    </div>
+                    <h5 class="card-title">Deudas Pendientes</h5>
+                    <p class="card-text display-6">${{ saldo_concentrado|floatformat:2|intcomma }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gráficos -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5>Ingresos vs Gastos</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="ingresosGastosChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5>Distribución de Gastos</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="distribucionGastosChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts para gráficos -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx1 = document.getElementById('ingresosGastosChart').getContext('2d');
+    var ingresosGastosChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+            datasets: [{
+                label: 'Ingresos',
+                data: [12000, 15000, 13000, 17000, 16000],
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }, {
+                label: 'Gastos',
+                data: [8000, 9000, 8500, 10000, 9500],
+                backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Comparación de Ingresos y Gastos'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    var ctx2 = document.getElementById('distribucionGastosChart').getContext('2d');
+    var distribucionGastosChart = new Chart(ctx2, {
+        type: 'pie',
+        data: {
+            labels: ['Personal', 'Servicios', 'Materiales', 'Otros'],
+            datasets: [{
+                data: [5000, 3000, 2000, 1000],
+                backgroundColor: [
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(255, 159, 64, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Distribución de Gastos'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends "./Recepcion.html" %}
+
+{% block tittle %}Almacen de inventario {% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<div class="row">
+    
+                      
+        <h1>Almacén General</h1>
+        <br><input class="py-2" type="text" id="buscador" placeholder="Buscar registro...">
+        <form method="GET" action="{% url 'verAl' %}">
+            <label for="nombre_filtro">Nombre:</label>
+            <input type="text" name="nombre_filtro" value="{{ nombre_filtro }}">
+            
+            <button type="submit" class="btn btn-secondary">Filtrar</button>
+        </form>
+        
+        <label for="total">Total de Unidades: {{ total_cajas }}</label>
+        <label for="total">Total de KgNetos: {{ total_kgNetos }}</label>
+        
+        <div class="table-responsive py-2">
+            <table  class="table table-dark table-striped"  id="tabla">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Tarima.</th>
+                        <th>Prov.</th>
+                        <th>Nombre</th>
+                        <th>Uds.</th>
+                        <th>Caja</th>
+                        <th>tipoT.</th>
+                        <th>KgBrutos.</th>
+                        <th>KgNetos.</th>
+                        <th>Fecha</th>
+                        <th>Maq</th>
+                        <th>Usuario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fruta in Frutas %}
+                    <tr>
+                        <td>{{ fruta.movimiento }}</td>
+                        <td>{{ fruta.proveedor.nombre }}</td>
+                        <td>{{ fruta.nombre.nombre }}</td>
+                        <td>{{ fruta.unidades }}</td>
+                        <td>{{ fruta.tipoCaja.nombre}}</td>
+                        <td>{{ fruta.tarima.nombre }}</td>
+                        <td>{{ fruta.kg }}</td>
+                        <td>{{ fruta.kgNetos }}</td>
+                        <td>{{ fruta.fecha|date:"m/d/y" }}</td>
+                        <td>{{ fruta.maq }}</td>
+                        <td>{{ fruta.usuario }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+            </table>
+        </div>
+    
+</div>
+
+<script>
+    // Obtener la fecha actual
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
+    var year = today.getFullYear();
+
+    // Obtener la hora actual
+    var hours = today.getHours();
+    var minutes = today.getMinutes();
+
+    // Formatear la fecha y hora actual
+    var formattedDate = year + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+    var formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+    // Establecer la fecha y hora actual en el campo de horaEnvio
+    document.getElementById("fecha").value = formattedDate + 'T' + formattedTime;
+</script>
+<!-- script para exportar a excel -->
+<!-- script para bucador e tabla -->
+<script>
+    const buscador = document.getElementById('buscador');
+    const tabla = document.getElementById('tabla');
+    const filas = tabla.getElementsByTagName('tr');
+
+    buscador.addEventListener('input', function () {
+        const filtro = buscador.value.toLowerCase();
+
+        for (let i = 1; i < filas.length; i++) {
+            const fila = filas[i];
+            const celdas = fila.getElementsByTagName('td');
+            let mostrarFila = false;
+
+            for (let j = 0; j < celdas.length; j++) {
+                const celda = celdas[j];
+                const contenidoCelda = celda.textContent.toLowerCase();
+
+                if (contenidoCelda.includes(filtro)) {
+                    mostrarFila = true;
+                    break;
+                }
+            }
+
+            if (mostrarFila) {
+                fila.style.display = '';
+            } else {
+                fila.style.display = 'none';
+            }
+        }
+    });
+</script>
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 10px; /* Ajusta este valor según prefieras */
+        overflow: hidden; /* Esto asegura que los bordes redondeados se muestren correctamente */
+        background-color: #525151;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        border: 1px solid #fff;
+        text-align: center;
+        
+    }
+
+    .table th {
+        background-color: #E05012;
+        color: #000000;
+        
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #000000;
+        border-radius: 15px;
+
+    }
+</style>
+
+<style>
+    #buscador {
+        padding: 6px;
+        border: 1px solid rgb(232, 12, 12);
+        border-radius: 30px;
+        margin-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+</style>
+
+
+
+{% endblock %}

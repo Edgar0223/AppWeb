@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Restringido</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <header>
+        <img src="/static/img/a.png" alt="Logo" class="logo">
+    </header>
+    <main>
+        <section class="error-message animate__animated animate__fadeIn">
+            <h1 class="animate__animated animate__pulse animate__infinite">Acceso Restringido</h1>
+            <img src="/static/img/ar.jpeg" alt="Acceso Restringido" class="error-image animate__animated animate__bounceIn">
+            <p>Por seguridad, los accesos se encuentran restringidos a los roles de usuario, para un mejor manejo de la información. Acuda con el supervisor o administrador para más informes.</p>
+            <p><strong>¡Gracias!</strong></p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Alifrut. Todos los derechos reservados. | <a href="/politicas">Política de Privacidad</a> | <a href="/terminos">Términos de Servicio</a></p>
+    </footer>
+    
+</body>
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+    
+    header {
+        background-color: #f08313;
+        padding: 10px;
+        text-align: right;
+    }
+    
+    .logo {
+        width: 100px;
+        height: auto;
+    }
+    
+    main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .error-message {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        width: 80%;
+        animation: slideIn 1s ease-out;
+    }
+    
+    .error-message h1 {
+        color: #e74c3c;
+        margin-bottom: 20px;
+    }
+    
+    .error-message p {
+        font-size: 18px;
+        line-height: 1.6;
+    }
+    
+    .error-image {
+        width: 100%;
+        height: auto;
+        max-width: 300px;
+        margin-bottom: 20px;
+        border-radius: 50%;
+    }
+    
+    footer {
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    footer a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+    
+    footer a:hover {
+        text-decoration: underline;
+    }
+    
+</style>
+</html>

@@ -1,0 +1,32 @@
+{% extends "./home.html" %}
+
+{% block tittle %}Gestion Proveedor{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h2>Edicion del tarima</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="" method="POST">{% csrf_token %}
+                    <div class="form-group py-2">
+                        <input type="text" id="nombre"  name="nombre" value="{{mues.nombre}}" class="form-control" placeholder="Nombre"
+                          required >
+                    </div>
+                    <div class="form-group py-2">
+                        <input type="text" id="peso"  name="peso" value="{{mues.peso}}" class="form-control" placeholder="Peso"
+                          required >
+                    </div>
+                    <div class="form-group py-2">
+                        <button type="submit" class="btn btn-success btn-block ext-white">Guardar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

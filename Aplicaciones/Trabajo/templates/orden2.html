@@ -1,0 +1,201 @@
+{% extends "./home.html" %}
+
+{% block tittle %}Orden de produccion{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<head>
+    <!-- links para exportar a excel -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/dist/jszip.js"></script>
+
+</head>
+<div class="row">
+    <div class="container-sm">
+        <h1>Ordenes de producción</h1>
+        <button id="btnExportar" class="btn btn-success">
+            <i class="fas fa-file-excel"></i> Exportar a Excel
+        </button><br>
+        <br><input class="py-2" type="text" id="buscador" placeholder="Buscar registro...">
+
+        <div class="table-responsive py-2">
+            <table class="table table-dark table-striped" id="tabla">
+                <thead>
+                    <tr class="table-primary">
+                        <th>ID.</th>
+                        <th>Cantidad.</th>
+                        <th>Clave</th>
+                        <th>Producto</th>
+                        <th>Fecha</th>
+                        <th>P.O.</th>
+                        <th>Usuario</th>
+                        <th colspan="2">Opciones</th>
+                        <th>Status</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fruta in Frutas %}
+                    <tr>
+                        <td>{{ fruta.id }}</td>
+                        <td>{{ fruta.cantidad }}</td>
+                        <td>{{ fruta.clave }}</td>
+                        <td>{{ fruta.producto }}</td>
+                        <td>{{ fruta.fecha }}</td>
+                        <td>{{ fruta.po }}</td>
+                        <td>{{ fruta.usuario }}</td>
+                        <td><a href="edicionOrden/{{ fruta.id }}" class="btn btn-info">Editar</a></td>
+                        <td><a href="{% url 'eliminarOrden' fruta_id=fruta.id %}" class="btn btn-danger btnEliminacionO">Eliminar</a></td>
+                        <td>
+                            <form method="POST" action="{% url 'aceptar_orden' fruta.id %}">
+                                {% csrf_token %}
+                                {% if not fruta.aceptado and not fruta.rechazado %}
+                                <button type="submit" name="completa" class="btn btn-secondary">Completado</button>
+                                {% endif %}
+                                {% if fruta.aceptado %}
+                                    <p class="text-success">Orden completa por {{ fruta.aceptador }} el {{fruta.fecha_aceptacion }}!!!
+                                    </p>
+                                {% endif %}
+                            </form>
+                        </td>
+                        
+                                
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+            </table> 
+        </div>
+    </div>
+</div>
+<script>
+    // Obtener la fecha actual
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
+    var year = today.getFullYear();
+
+    // Obtener la hora actual
+    var hours = today.getHours();
+    var minutes = today.getMinutes();
+
+    // Formatear la fecha y hora actual
+    var formattedDate = year + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+    var formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+    // Establecer la fecha y hora actual en el campo de horaEnvio
+    //document.getElementById("fecha").value = formattedDate + 'T' + formattedTime;
+</script>
+<script>
+    // Obtener la fecha actual
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
+    var year = today.getFullYear();
+
+    // Obtener la hora actual
+    var hours = today.getHours();
+    var minutes = today.getMinutes();
+
+    // Formatear la fecha y hora actual
+    var formattedDate = year + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+    var formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+    // Establecer la fecha y hora actual en el campo de horaEnvio
+    d = formattedDate + 'T' + formattedTime;
+</script>
+<script>
+    const $btnExportar = document.querySelector("#btnExportar"),
+        $tabla = document.querySelector("#tabla");
+
+    $btnExportar.addEventListener("click", function() {
+        const currentDate = new Date();
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const year = currentDate.getFullYear();
+
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.table_to_sheet($tabla);
+        XLSX.utils.book_append_sheet(wb, ws, 'Reporte de congelado');
+
+        const filename = `Congelado Interno ${day}-${month}-${year}.xlsx`;
+
+        XLSX.writeFile(wb, filename);
+    });
+</script>
+
+<style>
+    #buscador {
+        padding: 6px;
+        border: 1px solid rgb(232, 12, 12);
+        border-radius: 30px;
+        margin-bottom: 10px;
+        width: 50%;
+        box-sizing: border-box;
+    }
+    
+</style>
+<!-- script para bucador e tabla -->
+<script>
+    const buscador = document.getElementById('buscador');
+    const tabla = document.getElementById('tabla');
+    const filas = tabla.getElementsByTagName('tr');
+
+    buscador.addEventListener('input', function () {
+        const filtro = buscador.value.toLowerCase();
+
+        for (let i = 1; i < filas.length; i++) {
+            const fila = filas[i];
+            const celdas = fila.getElementsByTagName('td');
+            let mostrarFila = false;
+
+            for (let j = 0; j < celdas.length; j++) {
+                const celda = celdas[j];
+                const contenidoCelda = celda.textContent.toLowerCase();
+
+                if (contenidoCelda.includes(filtro)) {
+                    mostrarFila = true;
+                    break;
+                }
+            }
+
+            if (mostrarFila) {
+                fila.style.display = '';
+            } else {
+                fila.style.display = 'none';
+            }
+        }
+    });
+</script>
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 10px; /* Ajusta este valor según prefieras */
+        overflow: hidden; /* Esto asegura que los bordes redondeados se muestren correctamente */
+        background-color: #525151;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        border: 1px solid #fff;
+        text-align: center;
+        
+    }
+
+    .table th {
+        background-color: #E05012;
+        color: #000000;
+        
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #000000;
+        border-radius: 15px;
+
+    }
+</style>
+{% endblock %}

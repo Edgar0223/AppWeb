@@ -1,0 +1,239 @@
+{% extends "./Recepcion.html" %}
+{% load static %}
+{% block tittle %}Envio a Maquila{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/maquila.css' %}">
+{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<head>
+    <!-- links para exportar a excel -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+</head>
+<div class="row">
+    <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-dismissible alert-success" id="alert-message">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="text-dark">{{ message }}</strong>
+        </div>
+        <script>
+            setTimeout(function() {
+                document.getElementById('alert-message').style.display = 'none';
+            }, 5000); // Cierra el mensaje después de 5 segundos (5000 milisegundos)
+        </script>
+        {% endfor %}
+        {% endif %}
+                <h1>Datos</h1>
+                <div class="card">
+                    <div class="card-body"> 
+                        <form action="{% url 'enviar' %}" method="POST" id="miFormulario">{% csrf_token %}
+                            <div class="form-group py-2">
+                                <input type="text" id="lote" name="lote" class="form-control" placeholder="Mov." required>
+                            </div>
+                            <div class="form-group py-2">
+                                <label for="nombre"><strong>Selecciona la fruta:</strong></label>
+                                <select type="text" id="nombre" name="nombre" class="form-control" required>
+                                    {% for frut in frut %}
+                                        <option value="{{ frut.id }}">{{ frut.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group py-2">
+                                <input type="text" id="maquila" name="maquila" class="form-control" placeholder="Maquila" required>
+                            </div>
+                            
+                            <div class="form-group py-2">
+                                <input type="text" id="cantidad" name="cantidad" class="form-control" placeholder="Kg" required>
+                            </div>
+                            
+                            <div class="form-group py-2">
+                                <input type="text" id="cajas" name="cajas" class="form-control" placeholder="Número de cajas" required>
+                            </div>
+                            <div class="form-group py-2">
+                                <label for="nombre"><strong>Selecciona el tipo de caja:</strong></label>
+                                <select type="text" id="tipoCaja" name="tipoCaja" class="form-control"  multiple required>
+                                    {% for emba in emba %}
+                                        <option value="{{ emba.id }}">{{ emba.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group py-2">
+                                <label for="nombre"><strong>Selecciona el tipo de tarima:</strong></label>
+                                <select type="text" id="tarima" name="tarima" class="form-control"  multiple required>
+                                    {% for paletas in paletas %}
+                                        <option value="{{ paletas.id }}">{{ paletas.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group py-2">
+                                <label for="nombre"><strong>Fecha:</strong></label>
+                                <input type="date" id="horaEnvio" name="horaEnvio" autocomplete="off" class="form-control" placeholder="Envio" value="{{ date.today }}"  readonly required>
+                            </div>
+                            <div class="form-group py-2">
+                                <label for="nombre"><strong>Hora:</strong></label>
+                                <input type="time" id="hora"  name="hora" class="form-control" placeholder="kg de fruta" value="{{ date.today }}"  required readonly>
+                            </div>
+                            <div class="form-group py-2">
+                                <button type="submit" class="btn btn-primary btn-block ext-white">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="col-sm-13 col-md-7 col-lg-9 col-xl-9">
+            <h1>Maquila Externa</h1>
+            <button id="btnExportar" class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Exportar a Excel
+            </button>
+            <div class="table-responsive py-2">
+                    <table class="table table-striped" id="tabla">
+                        <thead>
+                            <tr class="table-primary">
+                                <th>ID.</th>
+                                <th>Mov.</th>
+                                <th>Nombre</th>
+                                <th>Maquila</th>
+                                <th>kg.</th>
+                                <th>#Cajas.</th>
+                                <th>TipoCajas.</th>
+                                <th>Tarima.</th>
+                                <th>kgNetos.</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Usuario</th>
+                                <th colspan="2">Opciones</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for fruta in Frutas %}
+                            <tr class="{% if c.en_almacen %}en-almacen{% else %}en-maquila{% endif %}">
+                           
+                                <td>{{ fruta.id }}</td>
+                                <td>{{ fruta.lote_id }}</td>
+                                <td>{{ fruta.nombre.nombre }}</td>
+                                <td>{{ fruta.maquila }}</td>
+                                <td>{{ fruta.cantidad }}</td>
+                                <td>{{ fruta.cajas }}</td>
+                                <td>{{ fruta.tipoCaja.nombre }}</td>
+                                <td>{{ fruta.tarima.nombre }}</td>
+                                <td>{{ fruta.kgNetos }}</td>
+                                <td>{{ fruta.horaEnvio|date:"m/d/y"}}</td>
+                                <td>{{ fruta.hora}}</td>
+                                <td>{{ fruta.usuario}}</td>
+
+                                <td><a href="{% url 'eliminarMaquila' maquila_id=fruta.id %}" class="btn btn-danger btnEliminacionMaquila">Eliminar</a></td>
+
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+</div>   
+   
+<script>
+    // Obtener la fecha actual
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
+    var year = today.getFullYear();
+
+    // Obtener la hora actual
+    var hours = today.getHours();
+    var minutes = today.getMinutes();
+
+    // Formatear la fecha y hora actual
+    var formattedDate = year + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+    var formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+    // Establecer la fecha y hora actual en el campo de horaEnvio
+    document.getElementById("horaEnvio").value = formattedDate;
+
+</script>
+<script>
+    function actualizarHora() {
+        // Obtener la fecha y hora actual
+        var fechaHora = new Date();
+        
+        // Formatear la hora en formato HH:mm
+        var hora = ('0' + fechaHora.getHours()).slice(-2);
+        var minutos = ('0' + fechaHora.getMinutes()).slice(-2);
+        var horaActual = hora + ':' + minutos;
+        
+        // Actualizar el valor del campo de hora
+        document.getElementById('hora').value = horaActual;
+    }
+
+    // Llamar a la función de actualización cada segundo
+    setInterval(actualizarHora, 1000);
+</script>
+
+<script>
+    const $btnExportar = document.querySelector("#btnExportar"),
+        $tabla = document.querySelector("#tabla");
+
+    $btnExportar.addEventListener("click", function() {
+        const currentDate = new Date();
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const year = currentDate.getFullYear();
+
+        let tableExport = new TableExport($tabla, {
+            exportButtons: false, // No queremos botones
+            filename: `Envio a Maquilas ${day}-${month}-${year}`, // Nombre del archivo de Excel con la fecha actual en formato dd-mm-aaaa
+            sheetname: 'Reporte de maquilas', // Título de la hoja
+        });
+
+        let datos = tableExport.getExportData();
+        let preferenciasDocumento = datos.tabla.xlsx;
+        tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+    });
+</script>
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 10px; /* Ajusta este valor según prefieras */
+        overflow: hidden; /* Esto asegura que los bordes redondeados se muestren correctamente */
+        background-color: #525151;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        border: 1px solid #fff;
+        text-align: center;
+        
+    }
+
+    .table th {
+        background-color: #E05012;
+        color: #000000;
+        
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #000000;
+        border-radius: 15px;
+
+    }
+</style>
+
+
+
+
+{% endblock %}
+
+
+
+

@@ -1,0 +1,123 @@
+{% extends "./Recepcion.html" %}
+
+{% block tittle %}Traspasos{% endblock %}
+
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-dismissible alert-success" id="alert-message">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="text-dark">{{ message }}</strong>
+        </div>
+        <script>
+            setTimeout(function() {
+                document.getElementById('alert-message').style.display = 'none';
+            }, 10000); // Cierra el mensaje después de 5 segundos (5000 milisegundos)
+        </script>
+        {% endfor %}
+        {% endif %}
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header"><h1 class="text-center">Traspasos de Almacenes</h1></div>
+                <div class="card-body">
+                    <form id="userForm" method="POST" action="{% url 'traspasarMovimiento' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group row py-2">
+                            <label for="inputPassword6" class="col-sm-4 col-form-label">Almacén Origen:</label>
+                            <div class="col-sm-8">
+                                <select name="almacen_origen" id="almacen_origen"  class="form-control" required>
+                                    <option value="fruta">Recepcion</option>
+                                    <option value="alfrut">Alfrut</option>
+                                    <option value="frigoe">Frigocenter</option>
+                                    <option value="con">P.Terminado</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row py-2">
+                            <label for="inputPassword6" class="col-sm-4 col-form-label">Almacén Destino:</label>
+                            <div class="col-sm-8">
+                                <select name="almacen_destino" id="almacen_destino"  class="form-control" required>
+                                    <option value="fruta">Recepcion</option>
+                                    <option value="alfrut">Alfrut</option>
+                                    <option value="frigoe">Frigocenter</option>
+                                    <option value="con">P.Terminado</option>
+                                    <option value="ventas">Ventas</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row py-2">
+                            <label for="inputPassword6" class="col-sm-4 col-form-label">Movimiento:</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="movimiento_id" class="form-control" aria-describedby="passwordHelpInline">
+                            </div>
+                        </div>
+                        <div class="col text-center">
+                            <span id="spanda"><small><small>
+                                El movimiento de el traspaso debe exirtir en el almacén de origen, los campos "Almacén Origen" y "Almacén Destino" no deben se iguales.
+
+                            </small></small></span>
+                        </div>
+                        <div class="form-group row py-2">
+                            <div class="col-sm-12 text-right">
+                                <button type="submit" class="btn btn-primary">Traspasar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-3">
+    <div class="row">
+        <div class="col text-center">
+            <button><a href="/inicio/">salir  <i class="fas fa-sign-out-alt"></i></a></button>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .card-header{
+        background: #E05012;
+    }
+    .btn{
+        background: #f08313;
+        margin: 20px;
+        margin-left: 700px;
+    }
+    .spanda{
+        color: rgba(255, 255, 255, 0.5);
+    }
+    button{
+        background-color: #f08313;
+        border-radius: 15px;
+        height: 50px;
+    }
+</style>
+<script>
+    // En tu archivo JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordField = document.getElementById('inputPassword6');
+    const showPasswordBtn = document.getElementById('showPasswordBtn');
+    
+    showPasswordBtn.addEventListener('click', function() {
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            showPasswordBtn.textContent = 'Ocultar';
+        } else {
+            passwordField.type = 'password';
+            showPasswordBtn.textContent = 'Mostrar';
+        }
+    });
+});
+
+</script>
+</body>
+</html>
+{%endblock%}

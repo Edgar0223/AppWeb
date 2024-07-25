@@ -1,0 +1,23 @@
+<div class="row mt-3 justify-content-enter">
+    <nav>
+        <ul class="pagination">
+            {% if Frutas.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">primera</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page=1={{posts.revious_page_number}}">&laquo;</a>
+                </li>
+            {% endif %}
+        
+            {% if Frutas.has_next  %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{Frutas.next_page_number}}">&raquo;</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{Frutas.paginator.num_pages}}">Ultima</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>

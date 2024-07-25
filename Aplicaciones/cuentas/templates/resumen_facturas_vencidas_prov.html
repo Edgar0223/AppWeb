@@ -1,0 +1,94 @@
+
+{% extends "./finanzas.html" %}
+{% load static %}
+{% block tittle %}Notas Vencidas{% endblock %}
+{% load humanize %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/maquila.css' %}">
+{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<head>
+    <!-- links para exportar a excel -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<div class="container-sm">
+    <div class="row">
+        <h1 align="center">Resumen de Notas Vencidas</h1>
+        <table  style="border-radius: 15px;" id="tabla">
+            <div align="right"><a href="/conta" style="color: #f08313;">Regresar</a></div>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th># De Nota</th>
+                    <th>Kilos a pagar</th>
+                    <th>Fecha de pago</th>
+                    <th>Total</th>
+                    <th>Dias tomados</th>
+                    <th>Opciones</th>
+                
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in detalles_vencimiento %}
+                    <tr {% if detalle.registro.vencido is True and detalle.registro.en_pago is False %}style="background-color: #e0121282; color: white;"{% endif %}>
+                        <td style="text-align: right;">{{ detalle.registro.fecha|date:"d/m/Y"}}</td>
+                        <td>{{ detalle.registro.folio }}</td>
+                        <td>{{ detalle.registro.totalK }}</td>
+                        <td>{{ detalle.fecha_pago|date:"d/m/Y" }}</td>
+                        <td>${{ detalle.registro.totalP |floatformat:2|intcomma}}</td>
+                        <td>{{ detalle.dias_diferencia }}</td>
+                        <td><a href="{% url 'eliminarNota' agri_id=detalle.registro.folio %}" class="btnEliminacionMaquila" style="color: #f00;">Eliminar</a></td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+            
+        </table>
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 50px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    th {
+        background-color: #1257e0;
+        color: #fff;
+        text-align: center;
+    }
+    td {
+        text-align: right;
+    }
+    td:first-child {
+        text-align: left;
+    }
+    .header {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+    .header div {
+        margin: 5px 0;
+    }
+    .logo {
+        float: right;
+    }
+</style>
+{% endblock %}

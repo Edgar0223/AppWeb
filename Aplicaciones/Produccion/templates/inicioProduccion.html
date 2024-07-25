@@ -1,0 +1,70 @@
+{% extends "./produccion.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Gestión de Producción{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <!-- Title Section -->
+    <div class="row justify-content-center text-center">
+        <div class="col-lg-8">
+            <h1 class="display-4 font-weight-bold text-dark">Gestión de Producción</h1>
+            <p class="lead text-muted">Optimiza los procesos de producción para mayor eficiencia y calidad.</p>
+            <hr class="my-4">
+        </div>
+    </div>
+    
+    <!-- Features Section -->
+    <div class="row mt-5 text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{% static 'img/pro1.jpg' %}" class="card-img-top rounded-top" alt="Planificación de Producción">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Planificación</h5>
+                    <p class="card-text text-muted">Organiza y coordina todos los recursos necesarios para la producción.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{% static 'img/pro2.jpg' %}" class="card-img-top rounded-top" alt="Control de Producción">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Control</h5>
+                    <p class="card-text text-muted">Monitorea y ajusta los procesos de producción para asegurar la calidad.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{% static 'img/pro3.jpg' %}" class="card-img-top rounded-top" alt="Eficiencia en Producción">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Eficiencia</h5>
+                    <p class="card-text text-muted">Maximiza la eficiencia de los recursos y tiempos de producción.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tools and Technologies Section -->
+    <div class="row mt-5">
+        <div class="col">
+            <h2 class="font-weight-bold text-dark">Herramientas y Tecnologías</h2>
+            <div class="list-group list-group-flush">
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Sistemas de Planificación de Recursos Empresariales (ERP)</h5>
+                </div>
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Tecnologías de Automatización</h5>
+                </div>
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Análisis de Datos para Optimización</h5>
+                </div>
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Software de Gestión de la Producción</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

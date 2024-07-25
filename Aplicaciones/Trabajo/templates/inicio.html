@@ -1,0 +1,129 @@
+{% extends "./home.html" %}
+
+{% block title %}Bienvenido a Alifrut - Trazabilidad de Fruta{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="col-md-12">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title text-center mb-3">Última Actividad</h5>
+                <ul class="list-group">
+                    {% for usuario in usuarios_activos %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ usuario.username }}, {{ usuario.rol }} 
+                        <span class="badge bg-primary rounded-pill"> {{ usuario.last_activity_hour }}-{{ usuario.last_activity_day }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title text-center mb-3">Materia Prima Disponible</h5>
+                <ul class="list-group">
+                    {% for fruta in frutas_disponibles %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ fruta.nombre__nombre }}
+                        <span class="badge bg-primary rounded-pill">{{ fruta.saldo_disponible }} kg</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <a href="/op" class="btn btn-primary mt-3 d-block text-center">Detalles</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de filtro -->
+    <form method="GET" action="{% url 'inicio' %}" align="center">
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <label for="fecha" class="form-label">Fecha</label>
+                <input type="date" class="form-control" id="fecha" name="fecha" value="{{ request.GET.fecha }}">
+            </div>
+        
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-3">Kilos Lavados</h5>
+                    <p>{{lavado_agrupado.usuario.nombre}}{{lavado_agrupado.horaEnvio}}{{lavado_agrupado.hora}}</p>
+                    <ul class="list-group">
+                        {% for item in lavado_agrupado %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ item.nombre__nombre }}
+                            <span class="badge bg-success rounded-pill">{{ item.saldo_lavado }} kg</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="/op3" class="btn btn-success mt-3 d-block text-center">Detalles</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-3">Kilos Congelados</h5>
+                    <ul class="list-group">
+                        {% for item in congelado_agrupado %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ item.nombre__nombre }}
+                            <span class="badge bg-success rounded-pill">{{ item.saldo_congelado }} kg</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="/op4" class="btn btn-success mt-3 d-block text-center">Detalles</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-3">Kilos Quebrados</h5>
+                    <ul class="list-group">
+                        {% for item in quebrado_agrupado %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ item.nombre__nombre }}
+                            <span class="badge bg-success rounded-pill">{{ item.saldo_quebrado }} kg</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="/op5" class="btn btn-success mt-3 d-block text-center">Detalles</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-3">Kilos PT</h5>
+                    <ul class="list-group">
+                        {% for item in pt_agrupado %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ item.nombre__nombre }}
+                            <span class="badge bg-success rounded-pill">{{ item.saldo_pt }} kg</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="/con" class="btn btn-success mt-3 d-block text-center">Detalles</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+{% endblock %}

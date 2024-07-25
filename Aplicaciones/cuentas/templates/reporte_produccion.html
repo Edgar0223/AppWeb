@@ -1,0 +1,161 @@
+
+{% extends "./finanzas.html" %}
+{% load static %}
+{% block tittle %}Formulario de Pagos{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/maquila.css' %}">
+{% endblock %}
+{% block body %}
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+    <div class="container">
+        <h1>Reporte de Producción de Frutas</h1>
+
+        <h2>Lavado</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fruta</th>
+                    <th>Nombre de Lavado</th>
+                    <th>Kg Netos</th>
+                    <th>Kg</th>
+                    <th>Hora de Envío</th>
+                    <th>Usuario</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in detalles_lavado %}
+                <tr>
+                    <td>{{ detalle.fruta }}</td>
+                    <td>{{ detalle.nombre_lavado }}</td>
+                    <td>{{ detalle.kgNetos }}</td>
+                    <td>{{ detalle.kg }}</td>
+                    <td>{{ detalle.horaEnvio }}</td>
+                    <td>{{ detalle.usuario }}</td>
+                    <td>{{ detalle.estado }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Congelado</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fruta</th>
+                    <th>Nombre de Congelado</th>
+                    <th>Kg Netos</th>
+                    <th>Kg</th>
+                    <th>Hora de Envío</th>
+                    <th>Usuario</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in detalles_congelado %}
+                <tr>
+                    <td>{{ detalle.fruta }}</td>
+                    <td>{{ detalle.nombre_congelado }}</td>
+                    <td>{{ detalle.kgNetos }}</td>
+                    <td>{{ detalle.kg }}</td>
+                    <td>{{ detalle.horaEnvio }}</td>
+                    <td>{{ detalle.usuario }}</td>
+                    <td>{{ detalle.estado }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Quebrado</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fruta</th>
+                    <th>Nombre de Quebrado</th>
+                    <th>Kg Netos</th>
+                    <th>Kg</th>
+                    <th>Hora de Envío</th>
+                    <th>Usuario</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in detalles_quebrado %}
+                <tr>
+                    <td>{{ detalle.fruta }}</td>
+                    <td>{{ detalle.nombre_quebrado }}</td>
+                    <td>{{ detalle.kgNetos }}</td>
+                    <td>{{ detalle.kg }}</td>
+                    <td>{{ detalle.horaEnvio }}</td>
+                    <td>{{ detalle.usuario }}</td>
+                    <td>{{ detalle.estado }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Conservación</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fruta</th>
+                    <th>Nombre de Conservación</th>
+                    <th>Kg Totales</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Cliente</th>
+                    <th>Destino</th>
+                    <th>Fecha de Aceptación</th>
+                    <th>Aceptador</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in detalles_conservacion %}
+                <tr>
+                    <td>{{ detalle.fruta }}</td>
+                    <td>{{ detalle.nombre_conservacion }}</td>
+                    <td>{{ detalle.kgT }}</td>
+                    <td>{{ detalle.fecha }}</td>
+                    <td>{{ detalle.hora }}</td>
+                    <td>{{ detalle.cliente }}</td>
+                    <td>{{ detalle.destino }}</td>
+                    <td>{{ detalle.fecha_aceptacion }}</td>
+                    <td>{{ detalle.aceptador }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+{% endblock %}

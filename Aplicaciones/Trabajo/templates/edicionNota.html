@@ -1,0 +1,67 @@
+{% extends "./home.html" %}
+
+{% block tittle %}Gestion Fruta{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h2>Edicion de la nota</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Folio:</strong></label>
+                        <input type="text" id="lote"  name="folio" value="{{nota.folio}}" class="form-control" placeholder="folio"
+                          readonly >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Precio:</strong></label>
+                        <input type="text" id="precio"  name="precio" value="{{nota.precio}}" class="form-control" placeholder="precio"
+                           >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Descuento:</strong></label>
+
+                        <input type="text" id="maquila"  name="descuento" value="{{nota.descuento}}" class="form-control" placeholder="descuento"
+                         required >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="comprobante"><strong>Comprobante de calidad:</strong></label>
+                        <input type="file" id="comprobante" name="comprobante" value="{{nota.comprobante}}" accept="image/*" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Fecha:</strong></label>
+                        <input type="date" id="fecha" name="fecha" value="{{nota.fecha}}" class="form-control" placeholder="Fecha"
+                          maxlength="50" readonly required >
+                    </div>
+                    <div class="form-group py-2">
+                        <button type="submit" class="btn btn-success btn-block ext-white">Guardar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    // Obtener la fecha actual
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
+    var year = today.getFullYear();
+
+    // Obtener la hora actual
+    var hours = today.getHours();
+    var minutes = today.getMinutes();
+
+    // Formatear la fecha y hora actual
+    var formattedDate = year + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+    var formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+    // Establecer la fecha y hora actual en el campo de horaEnvio
+    document.getElementById("fecha").value = formattedDate;
+</script>
+{% endblock %}

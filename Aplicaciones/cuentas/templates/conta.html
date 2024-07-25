@@ -1,0 +1,290 @@
+{% extends "./finanzas.html" %}
+{% load static %}
+{% block tittle %}Gestión Proveedores{% endblock %}
+{% load humanize %}
+{% block body %}
+
+<head>
+    <!-- Links para exportar a Excel -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+     <!-- Enlace a SweetAlert2 -->
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<div class="row">
+    <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">
+        <h2>Agregar Empresa</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="{% url 'agregarEmp' %}" method="POST" class="form">{% csrf_token %}
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Nombre:</strong></label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="rfc"><strong>RFC:</strong></label>
+                        <input type="text" id="rfc" name="rfc" class="form-control" placeholder="RFC" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="banco"><strong>Banco:</strong></label>
+                        <input type="text" id="banco" name="banco" class="form-control" placeholder="Banco" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="cuenta"><strong>Cuenta:</strong></label>
+                        <input type="text" id="cuenta" name="cuenta" class="form-control" placeholder="Cuenta" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="tipo"><strong>Tipo de Proveedor:</strong></label>
+                        <select id="tipo" name="tipo" class="form-control" required>
+                            <option value="">Selecciona uno</option>
+                            {% for cat in cat %}
+                                <option value="{{ cat.id }}">{{ cat.nombre }}-{{ cat.descripcion }}</option>
+                            {% endfor %}
+                        </select> 
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="dias_vencimiento"><strong>Días para pagar:</strong></label>
+                        <input type="text" id="dias_vencimiento" name="dias_vencimiento" class="form-control" placeholder="Días para pagar" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="isr_aplicable"><strong>Aplica ISR:</strong></label>
+                        <input type="checkbox" id="isr_aplicable" name="isr_aplicable">
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="retencion_iva_aplicable"><strong>Aplica Retención de IVA:</strong></label>
+                        <input type="checkbox" id="retencion_iva_aplicable" name="retencion_iva_aplicable">
+                    </div>
+                    <div class="form-group py-2">
+                        <button type="submit" class="btn btn-primary btn-block text-white">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-13 col-md-7 col-lg-9 col-xl-9">
+        <h1>Contabilidad de proveedores</h1>
+
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <button id="btnExportar" class="btn btn-success"><i class="fas fa-file-excel"></i> Exportar a Excel</button>
+                <a href="/agregarFacturas" class="btn" style="background-color: #f08313; color: #fff;">Agregar factura</a>
+                <a href="/pago1" class="btn" style="background-color: #1368f0; color: #fff;">Agregar Pago</a>
+            </div>
+            <div>
+                <div style="color: #f00;"><strong><h3>Saldo concentrado</h3></strong></div>
+                <div style="color: #f00;"><strong><h3>$ {{ saldo_total|floatformat:2|intcomma }}</h3></strong></div>
+            </div>
+        </div>
+        
+        <input class="py-2" type="text" id="buscador" placeholder="Buscar registro...">
+        <div class="table-responsive py-2">
+            <table class="table table-striped" id="tabla">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>RFC</th>
+                        <th>Saldo</th>
+                        <th>Tolerancia</th>
+                        <th>Tipo</th>
+                        <th>Último pago</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in empresas_con_ultimos_pagos %}
+                        <tr>
+                            <td>{{ item.empresa.id }}</td>
+                            <td><a href="infoProv/{{ item.empresa.id }}">{{ item.empresa.nombre }}</a></td>
+                            <td>{{ item.empresa.rfc }}</td>
+                            <td>$ {{ item.empresa.saldo|floatformat:2|intcomma }}</td>
+                            <td>{{ item.empresa.dias_vencimiento }} Días</td>
+                            <td>{{ item.empresa.tipo.nombre }}</td>
+                            <td>
+                                {% if item.ultima_fecha_pago %}
+                                    {{ item.ultima_fecha_pago|date:"d/m/Y" }}
+                                {% else %}
+                                    No hay pagos registrados
+                                {% endif %}
+                            </td>
+                            <td><a class="btn btn-delete" data-id="{{ item.empresa.id }}" style="background-color: #f00;color:#fff;"><i class="fas fa-trash-alt"></i></a></td>
+                            <td><a href="editarEmp/{{ item.empresa.id }}" class="btn" style="background-color: rgb(0, 136, 255);color:#fff;"><i class="fas fa-edit"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #ffffff;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        border: 1px solid #fff;
+        text-align: center;
+    }
+
+    .table th {
+        background-color: #1257e0;
+        color: #fff;
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #000000;
+    }
+
+    .card {
+        border-color: #1257e0;
+    }
+
+    #buscador {
+        padding: 6px;
+        border: 1px solid #E05012;
+        border-radius: 30px;
+        margin-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const darkLight = document.getElementById('darkLight');
+        const body = document.body;
+
+        darkLight.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+
+        const buscador = document.getElementById('buscador');
+        const tabla = document.getElementById('tabla');
+        const filas = tabla.getElementsByTagName('tr');
+
+        buscador.addEventListener('input', function () {
+            const filtro = buscador.value.toLowerCase();
+
+            for (let i = 1; i < filas.length; i++) {
+                const fila = filas[i];
+                const celdas = fila.getElementsByTagName('td');
+                let mostrarFila = false;
+
+                for (let j = 0; j < celdas.length; j++) {
+                    const celda = celdas[j];
+                    const contenidoCelda = celda.textContent.toLowerCase();
+
+                    if (contenidoCelda.includes(filtro)) {
+                        mostrarFila = true;
+                        break;
+                    }
+                }
+
+                if (mostrarFila) {
+                    fila.style.display = '';
+                } else {
+                    fila.style.display = 'none';
+                }
+            }
+        });
+    });
+</script>
+
+<!-- script para exportar a excel -->
+<script>
+    const $btnExportar = document.querySelector("#btnExportar"),
+        $tabla = document.querySelector("#tabla");
+
+    $btnExportar.addEventListener("click", function() {
+        const currentDate = new Date();
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const year = currentDate.getFullYear();
+
+        let tableExport = new TableExport($tabla, {
+            exportButtons: false, // No queremos botones
+            filename: `Proveedores ${day}-${month}-${year}`, // Nombre del archivo de Excel con la fecha actual en formato dd-mm-aaaa
+            sheetname: 'Reporte de proveedores', // Título de la hoja
+        });
+
+        let datos = tableExport.getExportData();
+        let preferenciasDocumento = datos.tabla.xlsx;
+        tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Código para el modo oscuro y el buscador
+
+        // Agregar evento de clic a los botones de eliminación
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevenir la acción por defecto del enlace
+                const empId = this.getAttribute('data-id'); // Obtener el ID de la empresa
+
+                // Mostrar la alerta de confirmación
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "No podrás revertir esto",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Enviar la solicitud de eliminación a través de AJAX
+                        fetch(`/eliminarConta/${empId}/`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}',
+                            },
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Eliminado',
+                                    text: 'Proveedor eliminado correctamente.',
+                                    timer: 5000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Hubo un problema al eliminar el proveedor.',
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Hubo un problema al eliminar el proveedor.',
+                            });
+                        });
+                    }
+                });
+            });
+        });
+    });
+
+    // Script para exportar a Excel
+</script>
+{% endblock %}

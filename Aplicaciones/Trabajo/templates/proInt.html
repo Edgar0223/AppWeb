@@ -1,0 +1,25 @@
+{% extends "./home.html" %}
+
+{% block tittle %}Gestion Fruta{% endblock %}
+{% block body %}
+    <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">  
+        <div id="list-example" class="list-group">
+            <a class="list-group-item list-group-item-action" href="#list-item-1">Elemento 1</a>
+            <a class="list-group-item list-group-item-action" href="#list-item-2">Elemento 2</a>
+            <a class="list-group-item list-group-item-action" href="#list-item-3">Elemento 3</a>
+            <a class="list-group-item list-group-item-action" href="#list-item-4">Elemento 4</a>
+        </div>
+    </div>
+    <div class="col-sm-13 col-md-7 col-lg-9 col-xl-9"></div>
+        <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+            <h4 id="list-item-1">Elemento 1</h4>
+            <p>...</p>
+            <h4 id="list-item-2">Elemento 2</h4>
+            <p>...</p>
+            <h4 id="list-item-3">Elemento 3</h4>
+            <p>...</p>
+            <h4 id="list-item-4">Elemento 4</h4>
+            <p>...</p>
+        </div>
+    </div>
+{% endblock %}

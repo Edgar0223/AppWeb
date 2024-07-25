@@ -1,0 +1,166 @@
+{% extends "./home.html" %}
+{% block title %}Nota de Maquila de Frutas{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+    <div class="container">
+        <h4>Nota de Agricultor</h4>
+        <form method="POST" action="{% url 'notas' %}">
+            {% csrf_token %}
+            <label for="fecha">Fecha:</label>
+            <input type="date" name="fecha" required>
+            
+            <label for="proveedor">Proveedor:</label>
+            <select type="text" id="proveedor" name="proveedor"  required>
+                {% for proveedor in proveedores %}
+                    <option value="{{ proveedor.id }}">{{ proveedor.nombre }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Buscar" class="btn">
+        </form>
+    </div>
+    <hr>
+    {% if registros %}
+    <div class="container">
+        <div class="p">
+            <label>Descuento %:</label>
+            <input type="number" name="descuento" id="descuentoInput"  onchange="calcularDescuento()" required>
+            <br>
+            <br>
+            <label for="precioK">Precio por kilo $:</label>
+            <input type="text" name="precioK" required>
+
+            <input type="submit" value="Enviar" class="btn">
+
+        </div>
+        <table class="table">
+            <thead>
+                <tr class="table-secondary">
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Proveedor</th>
+                    <th>Fecha</th>
+                    <th>Cajas</th>
+                    <th>TipoCaja</th>
+                    <th>Tara Cajas</th>
+                    
+                    <th>Tarima</th>
+                    <th>Tara tarima</th>
+                    <th>Kilos Brutos</th>
+                    <th>Kilos Netos</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                    <tr>
+                        <td>{{ registro.movimiento }}</td>
+                        <td>{{ registro.nombre }}</td>
+                        <td>{{ registro.proveedor }}</td>
+                        <td>{{ registro.fecha }}</td>
+                        <td>{{ registro.unidades }}</td>
+                        <td>{{ registro.tipoCaja }}</td>
+                        <td>{{ registro.tara_cajas_calculada }}</td>
+                        <td>{{ registro.tarima }}</td>
+                        <td>{{ registro.tara_tarima_calculada}}</td>
+                        <td>{{ registro.kg }}</td>
+                        <td>{{ registro.kgNetos }}</td>
+                    </tr>
+                {% endfor %}
+                <br>
+                <br>
+                <tr>
+                    <td colspan=""><strong>Totales:</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{ total_kilosC.total_kilosC }}</td>
+                   
+                    <td></td>
+                    <td>{{total_tara_cajas|floatformat:2}}</td>
+                    <td></td>
+                    <td>{{total_tara_tarimas}}</td>
+                    <td>{{ total_kilosB.total_kilosB }}</td>
+                    <td>{{ total_kilos }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Descuento:</strong></td>
+                    <td id="descuentoMostrado">{{descuento}}</td>
+                </tr>
+               
+                <tr>
+                    <td><strong>Kilos a pagar:</strong></td>
+                    <td id="totalKMostrado"></td>
+                </tr>
+                <tr>
+                    <td><strong>Total $:</strong></td>
+                    <td>$</td>
+                </tr>
+                
+            </tbody>
+        </table>
+        <button class="btn" onclick="window.print()">Imprimir Nota</button>
+    </div>
+    {% else %}
+        <p>NO HAY REGISTROS DE ENTRADAS DEL AGRICULTOR HOY!!!!</p>
+    {% endif %}
+    <style>
+        /* Estilos CSS aquí si es necesario */
+        .btn{
+            background-color: #f08313;
+        }
+        @media print {
+            /* Ocultar el formulario cuando se imprime */
+            form {
+              display: none;
+            }
+            .navbar{
+                display: none;
+            }
+            .btn{
+                display: none;
+            }
+            .p{
+                display: none;
+            }
+          }
+        
+    </style>
+    <script>
+    
+        function calcularTotal() {
+            const kilosN = parseFloat(document.getElementById('kilosN').value);
+            const costoK = parseFloat(document.getElementById('costoK').value);
+            const total = kilosN * costoK;
+            document.getElementById('total').value = total.toFixed(2);
+        }
+        function calcularDescuento() {
+            const kilosN = parseFloat(document.getElementById('kilosN').value);
+            const descuentoPorcentaje = parseFloat(document.getElementById('descuentoInput').value);
+            const descuento = (kilosN * descuentoPorcentaje) / 100; // Corregir la variable descuento
+            document.getElementById('totalKMostrado').textContent = descuento.toFixed(2); // Mostrar el descuento con dos decimales
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const descuentoInput = document.getElementById('descuento');
+            const descuentoMostrado = document.getElementById('descuentoMostrado');
+        
+            descuentoInput.addEventListener('input', function() {
+                const valorDescuento = this.value;
+                descuentoMostrado.textContent = valorDescuento + '%';
+            });
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+        const descuentoInput = document.getElementById('descuentoInput');
+        const descuentoMostrado = document.getElementById('descuentoMostrado');
+
+        descuentoInput.addEventListener('input', function() {
+            const valorDescuento = this.value;
+            descuentoMostrado.textContent = valorDescuento + '%';
+            calcularDescuento(); // Calcular el descuento en tiempo real
+        });
+});
+
+        
+    </script>
+    
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "./finanzas.html" %}
+{% load static %}
+{% block tittle %}Gestión Proveedores - Reporte{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/maquila.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="header">
+        <h1>Reporte de {{ empresa.nombre }}</h1>
+        <p>RFC: {{ empresa.rfc }}</p>
+        <p>Banco: {{ empresa.banco }}</p>
+        <p>Cuenta: {{ empresa.cuenta }}</p>
+        <p>Periodo: {{ start_date }} a {{ end_date }}</p>
+    </div>
+
+
+
+    
+    
+    <h2>Pagos</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha de Pago</th>
+                <th>Referencia</th>
+                <th>Total</th>
+                <th>Forma de Pago</th>
+                <th>Movimiento</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pago in pagos_filtrados %}
+            <tr style="background-color: #00f;">
+                <td>{{ pago.fechaPago }}</td>
+                <td>{{ pago.refe }}</td>
+                <td>{{ pago.total }}</td>
+                <td>{{ pago.formaPago }}</td>
+                <td>{{ pago.movi }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Facturas</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>No. de Factura</th>
+                <th>Folio Fiscal</th>
+                <th>Concepto</th>
+                <th>Monto</th>
+                <th>IVA</th>
+                <th>Total</th>
+                <th>Vencido</th>
+                <th>En Pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for factura in facturas_filtradas %}
+            <tr>
+                <td>{{ factura.fecha }}</td>
+                <td>{{ factura.noFac }}</td>
+                <td>{{ factura.folioF }}</td>
+                <td>{{ factura.concepto }}</td>
+                <td>{{ factura.monto }}</td>
+                <td>{{ factura.iva }}</td>
+                <td>{{ factura.total }}</td>
+                <td>{{ factura.vencido }}</td>
+                <td>{{ factura.en_pago }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

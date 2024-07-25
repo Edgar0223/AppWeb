@@ -1,0 +1,140 @@
+
+{% extends "./home.html" %}
+{% load static %}
+{% block tittle %}Gestión Proveedores{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/maquila.css' %}">
+{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<head>
+    <!-- links para exportar a excel -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+</head>
+
+<div class="row">
+    <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-dismissible alert-success" id="alert-message">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="text-dark">{{ message }}</strong>
+        </div>
+        <script>
+            setTimeout(function() {
+                document.getElementById('alert-message').style.display = 'none';
+            }, 5000); // Cierra el mensaje después de 5 segundos (5000 milisegundos)
+        </script>
+        {% endfor %}
+        {% endif %}
+        <div class="card">
+            <div class="card-body">
+                <h1>Registrar Salida de Stock</h1>
+                {% if error_message %}
+                    <p style="color: red;">{{ error_message }}</p>
+                {% endif %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <label for="proveedor">Proveedor:</label>
+                    <select name="proveedor" id="proveedor" required>
+                        {% for proveedor in proveedores %}
+                            <option value="{{ proveedor.id }}">{{ proveedor.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <br><br>
+                    <label for="unidades">Unidades:</label>
+                    <input type="number" name="unidades" id="unidades" required min="1">
+                    <br><br>
+                    <button type="submit">Registrar Salida</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-13 col-md-7 col-lg-9 col-xl-9">
+                      
+        <h1>Lista</h1><button id="btnExportar" class="btn btn-success"><i class="fas fa-file-excel"></i> Exportar Excel</button>
+        
+        
+        <div class="table-responsive py-2">
+            <table class="table table-dark  table-striped" id="tabla">
+                <thead>
+                    <tr class="table-primary">
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Saldo</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for proveedores in proveedores %}
+                    <tr>
+                      <td>{{ proveedores.id }}</td>
+                      <td>{{ proveedores.nombre }}</td>
+                      <td>{{ proveedores.saldo_cajas }}</td>
+                        
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const $btnExportar = document.querySelector("#btnExportar"),
+        $tabla = document.querySelector("#tabla");
+
+    $btnExportar.addEventListener("click", function() {
+        const currentDate = new Date();
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const year = currentDate.getFullYear();
+
+        let tableExport = new TableExport($tabla, {
+            exportButtons: false, // No queremos botones
+            filename: `Proveedores ${day}-${month}-${year}`, // Nombre del archivo de Excel con la fecha actual en formato dd-mm-aaaa
+            sheetname: 'Reporte de proveedores', // Título de la hoja
+        });
+
+        let datos = tableExport.getExportData();
+        let preferenciasDocumento = datos.tabla.xlsx;
+        tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+    });
+</script>
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 10px; /* Ajusta este valor según prefieras */
+        overflow: hidden; /* Esto asegura que los bordes redondeados se muestren correctamente */
+        background-color: #525151;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        border: 1px solid #fff;
+        text-align: center;
+        
+    }
+
+    .table th {
+        background-color: #E05012;
+        color: #000000;
+        
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #000000;
+        border-radius: 15px;
+
+    }
+</style>
+
+
+
+{% endblock %}

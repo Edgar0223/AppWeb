@@ -1,0 +1,125 @@
+{% extends "./finanzas.html" %}
+{% load static %}
+{% block title %}Gestión Proveedores - Informe Completo{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/maquila.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="header">
+        <h1>Informe Completo de {{ empresa.nombre }}</h1>
+        <p>RFC: {{ empresa.rfc }}</p>
+        <p>Banco: {{ empresa.banco }}</p>
+        <p>Cuenta: {{ empresa.cuenta }}</p>
+        <p>Saldo: {{ empresa.saldo }}</p>
+        <p>Tipo: {{ empresa.tipo }}</p>
+        <p>Días de Vencimiento: {{ empresa.dias_vencimiento }}</p>
+    </div>
+    
+    <h2>Pagos</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Fecha de Pago</th>
+                <th>Referencia</th>
+                <th>Total</th>
+                <th>Forma de Pago</th>
+                <th>Movimiento</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pago in pagos_filtrados %}
+            <tr>
+                <td>{{ pago.fechaPago }}</td>
+                <td>{{ pago.refe }}</td>
+                <td>{{ pago.total }}</td>
+                <td>{{ pago.formaPago }}</td>
+                <td>{{ pago.movi }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Facturas</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>No. de Factura</th>
+                <th>Folio Fiscal</th>
+                <th>Concepto</th>
+                <th>Monto</th>
+                <th>IVA</th>
+                <th>Total</th>
+                <th>Vencido</th>
+                <th>En Pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for factura in facturas_filtradas %}
+            <tr>
+                <td>{{ factura.fecha }}</td>
+                <td>{{ factura.noFac }}</td>
+                <td>{{ factura.folioF }}</td>
+                <td>{{ factura.concepto }}</td>
+                <td>{{ factura.monto }}</td>
+                <td>{{ factura.iva }}</td>
+                <td>{{ factura.total }}</td>
+                <td>{{ factura.vencido }}</td>
+                <td>{{ factura.en_pago }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        color: #333;
+    }
+    
+    .container {
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .header h1 {
+        font-size: 24px;
+        color: #007bff;
+    }
+    
+    .header p {
+        font-size: 14px;
+        margin: 5px 0;
+    }
+    
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+    
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    .table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+    
+    .table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    
+</style>
+{% endblock %}

@@ -1,0 +1,121 @@
+
+{% extends "./finanzas.html" %}
+{% load static %}
+{% block tittle %}Gestión Proveedores{% endblock %}
+{% load humanize %}
+{% block body %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<head>
+    <!-- links para exportar a excel -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border-radius: 15px;
+
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .table th {
+            background-color: #1257e0;
+            color: #fff;
+            text-align: center;
+        }
+        td {
+            text-align: right;
+        }
+        td:first-child {
+            text-align: left;
+        }
+        .header {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .header div {
+            margin: 5px 0;
+        }
+        .logo {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+<div align="center">
+    <div style="width: 30%;">
+        {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-dismissible alert-success" id="alert-message">
+                    <strong class="text-dark">{{ message }}</strong>
+                </div>
+                <script>
+                    setTimeout(function() {
+                        document.getElementById('alert-message').style.display = 'none';
+                    }, 5000); // Cierra el mensaje después de 5 segundos (5000 milisegundos)
+                </script>
+                {% endfor %}
+            {% endif %}
+    </div>
+</div>
+<div class="container" style="margin-left: block;">
+    <div class="row">
+        <div class="header" >
+            <h1 align="center">Facturas</h1>
+        </div>
+        <table id="table" class="table" style="border-radius: 15px;">
+            <div align="right"><a href="{% url 'pagos2' %}" style="color: #f08313;">verPagos</a></div>
+            <thead>
+                <tr>
+                    <th>Facturas</th>
+                    <th>Nombre</th>
+                    <th># De Factura</th>
+                    <th>Folio Fiscal</th>
+                    <th>Fecha</th>
+                    <th>Concepto</th>
+                    <th>Monto</th>
+                    <th>IVA</th>
+                    <th>Total</th>
+                    <th>Retención</th>
+                    <th>Opciones</th>
+                
+                </tr>
+            </thead>
+            <tbody>
+                {% for con in con %}
+                        <tr {% if con.vencido is True and con.en_pago is False %}style="background-color: #e0121282; color: white;"{% endif %} >
+                            <td style="text-align: right;">{{con.id}}</td>
+                            <td style="text-align: right;">{{con.nombre.nombre}}</td>
+                            <td>{{con.noFac}}</td>
+                            <td>{{con.folioF}}</td>
+                            <td>{{con.fecha|date:"d/m/Y"}}</td>
+                            <td>{{con.concepto}}</td>
+                            <td>${{con.monto|floatformat:2|intcomma }}</td>
+                            <td>${{con.iva|floatformat:2|intcomma }}</td>
+                            <td>${{con.total|floatformat:2|intcomma }}</td>
+                            <td>${{con.retencion|floatformat:2|intcomma }}</td>
+                        
+                            <td><a href="{% url 'eliminarFactura' factura_id=con.id %}" class="btnEliminacionMaquila" style="color: #f00;">Eliminar</a></td>
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

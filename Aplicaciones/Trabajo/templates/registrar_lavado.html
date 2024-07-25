@@ -1,0 +1,88 @@
+<!-- templates/registrar_devolucion.html -->
+{% extends "./home.html" %}
+{% load static %}
+{% block tittle %}Registrar Devolución{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/maquila.css' %}">
+{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<div class="row">
+    <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-dismissible alert-success" id="alert-message">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="text-dark">{{ message }}</strong>
+        </div>
+        <script>
+            setTimeout(function() {
+                document.getElementById('alert-message').style.display = 'none';
+            }, 5000); // Cierra el mensaje después de 5 segundos (5000 milisegundos)
+        </script>
+        {% endfor %}
+        {% endif %}
+        <h1>Registrar Devolución</h1>
+        <div class="card">
+            <div class="card-body">
+                <form action="{% url 'registrarDevolucion' %}" method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="form-group py-2">
+                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="text" id="lote" name="lote" class="form-control" placeholder="Lote" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="number" id="cajas" name="cajas" class="form-control" placeholder="Cajas" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="number" id="tipoCaja" name="tipoCaja" class="form-control" placeholder="Tipo de Caja" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="number" id="tarima" name="tarima" class="form-control" placeholder="Tarima" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="number" id="kg" name="kg" class="form-control" placeholder="Kg" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="number" id="kgNetos" name="kgNetos" class="form-control" placeholder="Kg Netos" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="number" id="kgDesp" name="kgDesp" class="form-control" placeholder="Kg Despachados" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="date" id="horaEnvio" name="horaEnvio" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="time" id="hora" name="hora" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="number" id="unidades_devueltas" name="unidades_devueltas" class="form-control" placeholder="Unidades Devueltas" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="number" id="kg_devueltos" name="kg_devueltos" class="form-control" placeholder="Kg Devueltos" required>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <button type="submit" class="btn btn-primary btn-block ext-white">Registrar Devolución</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

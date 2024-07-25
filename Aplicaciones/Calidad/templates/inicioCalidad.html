@@ -1,0 +1,71 @@
+{% extends "./Calidad.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Gestión de Calidad{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <!-- Title Section -->
+    <div class="row justify-content-center text-center">
+        <div class="col-lg-8">
+            <h1 class="display-4 font-weight-bold text-dark">Gestión de Calidad</h1>
+            <p class="lead text-muted">Asegura la calidad de los productos con rigurosos estándares y prácticas de mejora continua.</p>
+            <hr class="my-4">
+        </div>
+    </div>
+    
+    <!-- Features Section -->
+    <div class="row mt-5 text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{% static 'img/control_calidad.jpg' %}" class="card-img-top rounded-top" alt="Control de Calidad">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Control de Calidad</h5>
+                    <p class="card-text text-muted">Supervisa y garantiza la calidad en cada etapa del proceso de producción.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{% static 'img/mejora_continua.png' %}" class="card-img-top rounded-top" alt="Mejora Continua">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Mejora Continua</h5>
+                    <p class="card-text text-muted">Implementa mejoras continuas para aumentar la eficiencia y calidad del producto final.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{% static 'img/cc1.png' %}" class="card-img-top rounded-top" alt="Certificaciones">
+                <img src="{% static 'img/cc2.png' %}" class="card-img-top rounded-top" alt="Certificaciones">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Certificaciones</h5>
+                    <p class="card-text text-muted">Obtén y mantén certificaciones de calidad reconocidas a nivel nacional e internacional.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Documents and Reports Section -->
+    <div class="row mt-5">
+        <div class="col">
+            <h2 class="font-weight-bold text-dark">Documentos y Reportes</h2>
+            <div class="list-group list-group-flush">
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Reportes de Auditoría Interna</h5>
+                </div>
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Manuales de Calidad</h5>
+                </div>
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Procedimientos Operativos Estándar</h5>
+                </div>
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Registros de Control de Calidad</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

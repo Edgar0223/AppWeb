@@ -1,0 +1,106 @@
+{% extends "./home.html" %}
+
+{% block tittle %}Gestion Fruta{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h2>Edicion de la concerva</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="" method="POST">{% csrf_token %}
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Lote:</strong></label>
+                        <input type="text" id="lote"  name="lote" value="{{fruta.lote}}" class="form-control" placeholder="Lote"
+                         required >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Tarima:</strong></label>
+                        <input type="text" id="tarima"  name="tarima" value="{{fruta.tarima}}" class="form-control" placeholder="Tarima"
+                          required >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Selecciona el proceso terminado:</strong></label>
+                        <select type="text" id="nombre" name="nombre"  class="form-control" required>
+                            <option value="{{fruta.nombre}}">{{fruta.nombre}}</option>
+                            <option value="FRESA CHICA IQF" {% if fruta.nombre == 'FRESA CHICA IQF' %}selected{% endif %}>FRESA CHICA IQF</option>
+                            <option value="FRESA ENTERA IQF" {% if fruta.nombre == 'FRESA ENTERA IQF' %}selected{% endif %}>FRESA ENTERA IQF</option>
+                            <option value="FRESA HARVEST IQF" {% if fruta.nombre == 'FRESA HARVEST IQF' %}selected{% endif %}>FRESA HARVEST IQF</option>
+                            <option value="FRESA MEDIANA IQF" {% if fruta.nombre == 'FRESA MEDIANA IQF' %}selected{% endif %}>FRESA MEDIANA IQF</option>
+                            <option value="FRESA MEDIANA MONARCH" {% if fruta.nombre == 'FRESA MEDIANA MONARCH' %}selected{% endif %}>FRESA MEDIANA MONARCH</option>
+                            <option value="FRESA PURE" {% if fruta.nombre == 'FRESA PURE' %}selected{% endif %}>FRESA PURE</option>
+                            <option value="JugoLimon" {% if fruta.nombre == 'JugoLimon' %}selected{% endif %}>JugoLimon</option>
+                            <option value="FRESA SORT OUT IQF" {% if fruta.nombre == 'FRESA SORT OUT IQF' %}selected{% endif %}>FRESA SORT OUT IQF</option>
+                            <option value="MANGO CHUNKS IQF" {% if fruta.nombre == 'MANGO CHUNKS' %}selected{% endif %}>MANGO CHUNKS IQF</option>
+                            <option value="ZARZAMORA IQF" {% if fruta.nombre == 'ZARZAMORA IQF' %}selected{% endif %}>ZARZAMORA IQF</option>
+                            <option value="PIÑA CHUNK IQF" {% if fruta.nombre == 'PIÑA CHUNK IQF' %}selected{% endif %}>PIÑA CHUNK IQF</option>
+                            <option value="FRAMBUESA ORG IQF" {% if fruta.nombre == 'FRAMBUESA ORG IQF' %}selected{% endif %}>FRAMBUESA ORG IQF</option>
+                            <option value="ARANDANO IQF" {% if fruta.nombre == 'ARANDANO IQF' %}selected{% endif %}>ARANDANO IQF</option>
+                            <option value="MIX DE FRUTOS ROJOS" {% if fruta.nombre == 'MIX DE FRUTOS ROJOS' %}selected{% endif %}>MIX DE FRUTOS ROJOS</option>
+                        </select>
+                    </div>
+                    
+                    
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Número de cajas:</strong></label>
+                        <input type="text" id="cajas"  name="cajas" value="{{fruta.cajas}}" class="form-control" placeholder="Número de cajas"
+                         required >
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Selecciona el tipo de caja:</strong></label>
+                        <select type="text" id="tipoCaja" name="tipoCaja" class="form-control" required>
+                            <option value="caja30lb" {% if fruta.tipoCaja == 'caja30lb' %}selected{% endif %}>caja30lb</option>
+                            <option value="caja20lb" {% if fruta.tipoCaja == 'caja20lb' %}selected{% endif %}>caja20lb</option>
+                            <option value="caja10lb" {% if fruta.tipoCaja == 'caja10lb' %}selected{% endif %}>caja10lb</option>
+                            <option value="caja20kg" {% if fruta.tipoCaja == 'caja20kg' %}selected{% endif %}>caja20kg</option>
+                            <option value="caja12lb" {% if fruta.tipoCaja == 'caja12lb' %}selected{% endif %}>caja12lb</option>
+                            <option value="Cubeta12kg" {% if fruta.tipoCaja == 'Cubeta12kg' %}selected{% endif %}>Cubeta12kg</option>
+                            <option value="Barril170" {% if fruta.tipoCaja == 'Barril170' %}selected{% endif %}>Barril-170</option>
+                        </select>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Cliente:</strong></label>
+                        <input type="text" id="cliente"  name="cliente" value="{{fruta.cliente}}" class="form-control" placeholder="Cliente" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Fecha:</strong></label>
+                        <input type="date" id="fecha" name="fecha" value="{{fruta.fecha}}" class="form-control" placeholder="Fecha"
+                          maxlength="50"  readonly required >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Hora:</strong></label>
+                        <input type="time" id="hora" name="hora" value="{{fruta.hora}}" class="form-control" placeholder="Fecha"
+                          maxlength="50"  readonly required >
+                    </div>
+                    <div class="form-group py-2">
+                        <button type="submit" class="btn btn-success btn-block ext-white">Guardar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    // Obtener la fecha actual
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
+    var year = today.getFullYear();
+
+    // Obtener la hora actual
+    var hours = today.getHours();
+    var minutes = today.getMinutes();
+
+    // Formatear la fecha y hora actual
+    var formattedDate = year + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+    var formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+    // Establecer la fecha y hora actual en el campo de horaEnvio
+    document.getElementById("fecha").value = formattedDate ;
+    document.getElementById("hora").value =  formattedTime;
+</script>
+{% endblock %}

@@ -1,0 +1,233 @@
+{% extends "./finanzas.html" %}
+{% load static %}
+{% block tittle %}Gestión Proveedores{% endblock %}
+{% load humanize %}
+{% load humanize %}
+
+{% block body %}
+
+
+<head>
+    <!-- Links para exportar a Excel -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<div class="row">
+    <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">
+        <div align="center">
+            <div style="width: 30%;">
+                {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-dismissible alert-success" id="alert-message">
+                            <strong class="text-dark">{{ message }}</strong>
+                        </div>
+                        <script>
+                            setTimeout(function() {
+                                document.getElementById('alert-message').style.display = 'none';
+                            }, 5000); // Cierra el mensaje después de 5 segundos (5000 milisegundos)
+                        </script>
+                        {% endfor %}
+                    {% endif %}
+            </div>
+        </div>
+
+        <h2>Agricultor</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="{% url 'agregarAgri' %}" method="POST" class="form">{% csrf_token %}
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Nombre:</strong></label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="rfc"><strong>Saldo:</strong></label>
+                        <input type="text" id="saldo" name="saldo" class="form-control" placeholder="saldo" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="banco"><strong>Tolerancia:</strong></label>
+                        <input type="text" id="dias_vencimiento" name="dias_vencimiento" class="form-control" placeholder="dias_vencimiento" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="cuenta"><strong>Saldo de cajas:</strong></label>
+                        <input type="text" id="saldo_cajas" name="saldo_cajas" class="form-control" placeholder="saldo_cajas" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="cuenta"><strong>Tipo de Proveedor:</strong></label>
+                        <select id="tipo" name="tipo" class="form-control" required>
+                            <option value="">Selesciona uno</option>
+                            {% for cat in cat %}
+                                <option value="{{ cat.id }}">{{cat.nombre}}-{{cat.descripcion}}</option>
+                            {% endfor %}
+                        </select> 
+                    </div>
+                
+                    <div class="form-group py-2">
+                        <button type="submit" class="btn btn-primary btn-block text-white">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-13 col-md-7 col-lg-9 col-xl-9">
+        <h1>Contabilidad de Agricultores</h1>
+
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <button id="btnExportar" class="btn btn-success"><i class="fas fa-file-excel"></i> Exportar a Excel</button>
+                <a href="/pagoProv1" class="btn" style="background-color: #1368f0; color: #fff;">Agregar Pago</a>
+            </div>
+            <div>
+                <div style="color: #f00;"><strong><h3>Saldo concentrado</h3></strong></div>
+                <div style="color: #f00;"><strong><h3>$ {{ saldo_total|floatformat:2|intcomma }}</h3></strong></div>
+            </div>
+        </div>
+        
+        <input class="py-2" type="text" id="buscador" placeholder="Buscar registro...">
+        <div class="table-responsive py-2">
+            <table class="table table-striped" id="tabla">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Saldo</th>
+                        <th>Tolerancia</th>
+                        <th>Tipo</th>
+                        <th>Último pago</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in empresas_con_ultimos_pagos %}
+                        <tr>
+                            <td>{{ item.empresa.id }}</td>
+                            <td><a href="/infoAgri/{{ item.empresa.id }}">{{ item.empresa.nombre }}</a></td>
+                            <td>$ {{ item.empresa.saldo|floatformat:2|intcomma  }}</td>
+                            <td>{{ item.empresa.dias_vencimiento }} Días</td>
+                            <td>{{ item.empresa.tipo.nombre }}</td>
+                            <td>
+                                {% if item.ultima_fecha_pago %}
+                                    {{ item.ultima_fecha_pago|date:"d/m/Y" }}
+                                {% else %}
+                                    No hay pagos registrados
+                                {% endif %}
+                            </td>
+                            <td><a href="{% url 'eliminarProv' emp_id=item.empresa.id %}" class="btn" style="background-color: #f00;color:#fff;"><i class="fas fa-trash-alt"></a></td>
+                            <td><a href="" class="btn" style="background-color: rgb(0, 136, 255);color:#fff;"><i class="fas fa-edit"></i></a></td>
+
+                        </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            
+        </div>
+    </div>
+</div>
+
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #ffffff;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        border: 1px solid #fff;
+        text-align: center;
+    }
+
+    .table th {
+        background-color: #1257e0;
+        color: #fff;
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #000000;
+    }
+
+    .card {
+        border-color: #1257e0;
+    }
+
+    #buscador {
+        padding: 6px;
+        border: 1px solid #E05012;
+        border-radius: 30px;
+        margin-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const darkLight = document.getElementById('darkLight');
+        const body = document.body;
+
+        darkLight.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+
+        const buscador = document.getElementById('buscador');
+        const tabla = document.getElementById('tabla');
+        const filas = tabla.getElementsByTagName('tr');
+
+        buscador.addEventListener('input', function () {
+            const filtro = buscador.value.toLowerCase();
+
+            for (let i = 1; i < filas.length; i++) {
+                const fila = filas[i];
+                const celdas = fila.getElementsByTagName('td');
+                let mostrarFila = false;
+
+                for (let j = 0; j < celdas.length; j++) {
+                    const celda = celdas[j];
+                    const contenidoCelda = celda.textContent.toLowerCase();
+
+                    if (contenidoCelda.includes(filtro)) {
+                        mostrarFila = true;
+                        break;
+                    }
+                }
+
+                if (mostrarFila) {
+                    fila.style.display = '';
+                } else {
+                    fila.style.display = 'none';
+                }
+            }
+        });
+    });
+</script>
+<!-- script para exportar a excel -->
+<script>
+    const $btnExportar = document.querySelector("#btnExportar"),
+        $tabla = document.querySelector("#tabla");
+
+    $btnExportar.addEventListener("click", function() {
+        const currentDate = new Date();
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const year = currentDate.getFullYear();
+
+        let tableExport = new TableExport($tabla, {
+            exportButtons: false, // No queremos botones
+            filename: `Proveedores ${day}-${month}-${year}`, // Nombre del archivo de Excel con la fecha actual en formato dd-mm-aaaa
+            sheetname: 'Reporte de proveedores', // Título de la hoja
+        });
+
+        let datos = tableExport.getExportData();
+        let preferenciasDocumento = datos.tabla.xlsx;
+        tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+    });
+</script>
+{% endblock %}

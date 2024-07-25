@@ -1,0 +1,90 @@
+{% extends "./home.html" %}
+
+{% block tittle %}Gestion Almacén{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h2>Edicion del Almacén</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="" method="POST">{% csrf_token %}
+                    
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Selecciona el proveedor:</strong></label>
+                        <select type="text" id="proveedor" name="proveedor" class="form-control"  multiple required>
+                            {% for proveedor in proveedores_list %}
+                            <option value="{{ proveedor.id }}" {% if fruta.proveedor == proveedor.id %}selected{% endif %}>{{ proveedor.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group py-2">
+                            <label for="nombre"><strong>Selecciona la fruta:</strong></label>
+                        <select type="text" id="nombre" name="nombre" class="form-control" required>
+                            {% for nombre in nombre %}
+                            <option value="{{ nombre.id }}" {% if fruta.nombre == nombre.id %}selected{% endif %}>{{ nombre.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="text" id="unidades"  name="unidades" value="{{fruta.unidades}}" class="form-control" placeholder="Unidades"
+                         required >
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Selecciona el tipo de caja:</strong></label>
+                        <select type="text" id="tipoCaja" name="tipoCaja" class="form-control" required>
+                            {% for emba in emba %}
+                            <option value="{{ emba.id }}" {% if emba.tipoCaja == emba.id %}selected{% endif %}>{{ emba.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Selecciona el tipo de tarima:</strong></label>
+                        <select type="text" id="tarima" name="tarima" class="form-control" required>
+                            {% for paletas in paletas %}
+                            <option value="{{ paletas.id }}" {% if paletas.tipoCaja == paletas.id %}selected{% endif %}>{{ paletas.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group py-2">
+                        <input type="text" id="kg"  name="kg" value="{{fruta.kg}}" class="form-control" placeholder="kg"
+                         >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Fruta:</strong></label>
+                        <input type="datetime-local" id="fecha" name="fecha" value="{{fruta.fecha}}" class="form-control" placeholder="Fecha"
+                          maxlength="50" readonly required >
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <button type="submit" class="btn btn-success btn-block ext-white">Guardar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    // Obtener la fecha actual
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
+    var year = today.getFullYear();
+
+    // Obtener la hora actual
+    var hours = today.getHours();
+    var minutes = today.getMinutes();
+
+    // Formatear la fecha y hora actual
+    var formattedDate = year + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+    var formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+    // Establecer la fecha y hora actual en el campo de horaEnvio
+    document.getElementById("fecha").value = formattedDate + 'T' + formattedTime;
+</script>
+{% endblock %}

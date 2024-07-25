@@ -1,0 +1,99 @@
+{% extends "./home.html" %}
+
+{% block tittle %}Gestion Fruta{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h2>Edicion de la maquila</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="" method="POST">{% csrf_token %}
+                    <div class="form-group py-2">
+                        <input type="text" id="lote"  name="lote" value="{{fruta.lote}}" class="form-control" placeholder="Lote"
+                          required >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Selecciona la fruta:</strong></label>
+                        <select type="text" id="nombre" name="nombre" class="form-control" required>
+                            <option value="Fresa" {% if fruta.nombre == 'Fresa' %}selected{% endif %}>Fresa</option>
+                            <option value="Mango" {% if fruta.nombre == 'Mango' %}selected{% endif %}>Mango</option>
+                            <option value="Piña" {% if fruta.nombre == 'Piña' %}selected{% endif %}>Piña</option>
+                            <option value="Arandano" {% if fruta.nombre == 'Arandano' %}selected{% endif %}>Arandano</option>
+                            <option value="Zarzamora" {% if fruta.nombre == 'Zarzamora' %}selected{% endif %}>Zarzamora</option>
+                            <option value="Frambuesa" {% if fruta.nombre == 'Frambuesa' %}selected{% endif %}>Frambuesa</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <input type="text" id="maquila"  name="maquila" value="{{fruta.maquila}}" class="form-control" placeholder="Maquila"
+                         required >
+                    </div>
+                    <div class="form-group py-2">
+                        <input type="text" id="cantidad"  name="cantidad" value="{{fruta.cantidad}}" class="form-control" placeholder="Cantidad"
+                         required >
+                    </div>
+                    <div class="form-group py-2">
+                        <input type="text" id="cajas"  name="cajas" value="{{fruta.cajas}}" class="form-control" placeholder="Cajas"
+                         required >
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Selecciona el tipo de caja:</strong></label>
+                        <select type="text" id="tipoCaja" name="tipoCaja" class="form-control" required>
+                            <option value="Proveedora" {% if fruta.tipoCaja == 'Proveedora' %}selected{% endif %}>Proveedora</option>
+                            <option value="Tijuana" {% if fruta.tipoCaja == 'Tijuana' %}selected{% endif %}>Tijuana</option>
+                            <option value="Colima" {% if fruta.tipoCaja == 'Colima' %}selected{% endif %}>Colima</option>
+                            <option value="Lima" {% if fruta.tipoCaja == 'Lima' %}selected{% endif %}>Lima</option>
+                            <option value="Jacona" {% if fruta.tipoCaja == 'Jacona' %}selected{% endif %}>Jacona</option>
+                            <option value="Regilla" {% if fruta.tipoCaja == 'Regilla' %}selected{% endif %}>Regilla</option>
+                            <option value="Morelia" {% if fruta.tipoCaja == 'Morelia' %}selected{% endif %}>Morelia</option>
+                            <option value="enfriado" {% if fruta.tipoCaja == 'enfriado' %}selected{% endif %}>enfriado</option>
+                            <option value="Saltillo" {% if fruta.tipoCaja == 'Saltillo' %}selected{% endif %}>Saltillo</option>
+                            <option value="Caja20lb" {% if fruta.tipoCaja == 'Caja20lb' %}selected{% endif %}>Caja20lb</option>
+                            <option value="Caja30lb" {% if fruta.tipoCaja == 'Caja30lb' %}selected{% endif %}>Caja30lb</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Selecciona el tipo de tarima:</strong></label>
+                        <select type="text" id="tarima" name="tarima" class="form-control" required>
+                            <option value="Madera" {% if fruta.tipoCaja == 'Madera' %}selected{% endif %}>Madera</option>
+                            <option value="Plastico" {% if fruta.tipoCaja == 'Plastico' %}selected{% endif %}>Plastico</option>
+                            <option value="Metal" {% if fruta.tipoCaja == 'Metal' %}selected{% endif %}>Metal</option>
+                        </select>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Fecha:</strong></label>
+                        <input type="datetime-local" id="horaEnvio" name="horaEnvio" value="{{fruta.horaEnvio}}" class="form-control" placeholder="Fecha"
+                          maxlength="50" readonly required >
+                    </div>
+                    <div class="form-group py-2">
+                        <button type="submit" class="btn btn-success btn-block ext-white">Guardar</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    // Obtener la fecha actual
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
+    var year = today.getFullYear();
+
+    // Obtener la hora actual
+    var hours = today.getHours();
+    var minutes = today.getMinutes();
+
+    // Formatear la fecha y hora actual
+    var formattedDate = year + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+    var formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+    // Establecer la fecha y hora actual en el campo de horaEnvio
+    document.getElementById("horaEnvio").value = formattedDate + 'T' + formattedTime;
+</script>
+{% endblock %}

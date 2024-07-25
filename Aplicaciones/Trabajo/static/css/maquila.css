@@ -1,0 +1,16 @@
+/* Estilos para frutas en almacén */
+tr.en-almacen {
+    background-color: green; /* Puedes ajustar el color que desees */
+    color: white; /* Puedes ajustar el color del texto para que sea legible */
+}
+
+/* Estilos para frutas en maquila */
+tr.en-maquila {
+    background-color: red; /* Puedes ajustar el color que desees */
+    color: white; /* Puedes ajustar el color del texto para que sea legible */
+}
+/* Estilos para frutas nuevas en el almacén */
+tr.fruta-nueva {
+    background-color: orange; /* Puedes ajustar el color que desees */
+    color: white; /* Puedes ajustar el color del texto para que sea legible */
+}

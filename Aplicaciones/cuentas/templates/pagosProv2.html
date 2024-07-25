@@ -1,0 +1,98 @@
+<!-- ver_pagos.html -->
+{% extends "./finanzas.html" %}
+{% load static %}
+{% block tittle %}Pagos de {{ empresa.nombre }}{% endblock %}
+{% load humanize %}
+
+{% block body %}
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border-radius: 50px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #1257e0;
+            color: #fff;
+            text-align: center;
+        }
+        td {
+            text-align: right;
+        }
+        td:first-child {
+            text-align: left;
+        }
+        .header {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .header div {
+            margin: 5px 0;
+        }
+        .logo {
+            float: right;
+        }
+    </style>
+</head>
+<div class="container-sm">
+    <div clas="row">
+        <div align="center">
+            <div style="width: 30%;">
+                {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-dismissible alert-success" id="alert-message">
+                            <strong class="text-dark">{{ message }}</strong>
+                        </div>
+                        <script>
+                            setTimeout(function() {
+                                document.getElementById('alert-message').style.display = 'none';
+                            }, 5000); // Cierra el mensaje después de 5 segundos (5000 milisegundos)
+                        </script>
+                        {% endfor %}
+                    {% endif %}
+            </div>
+        </div>
+        <div align="center"><h1>Pagos a agricultores</h1></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Empresa</th>
+                    <th>Total</th>
+                    <th>Fecha de Pago</th>
+                    <th>Referencia</th>
+                    <th>Forma de Pago</th>
+                    <th>Movimiento</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for con in con %}
+                    <tr>
+                        <td style="text-align: right;">{{ con.nombre.nombre }}</td>
+                        <td>${{ con.total|floatformat:2|intcomma }}</td>
+                        <td>{{ con.fechaPago|date:"m/d/Y" }}</td>
+                        <td>{{ con.refe }}</td>
+                        <td>{{ con.formaPago }}</td>
+                        <td>{{ con.movi }}</td>
+                        <td>
+                            <a href="{% url 'eliminarPago' pago_id=con.id %}" class="btnEliminacionMaquila" style="color: #f00;">
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

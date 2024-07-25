@@ -1,0 +1,83 @@
+
+{% extends "./finanzas.html" %}
+{% load static %}
+{% block tittle %}Formulario de Pagos{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/maquila.css' %}">
+{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<head>
+    <!-- links para exportar a excel -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<div class="container-sm">
+    <div class="row">
+        <h1 align="center">Resumen de Facturas Vencidas</h1>
+        <table>
+            <tr>
+                <th>Factura</th>
+                <th>Empresa</th>
+                <th>Fecha de Registro</th>
+                <th>Monto</th>
+                <th>Tolerancia</th>
+                <th>Días de Diferencia</th>
+            </tr>
+            {% for detalle in detalles_vencimiento %}
+            <tr {% if detalle.registro.vencido is True and detalle.registro.en_pago is False %}style="background-color: #e0121282; color: white;"{% endif %}>
+                <td>{{ detalle.registro.noFac }}</td>
+                <td>{{ detalle.registro.nombre.nombre }}</td>
+                <td>{{ detalle.registro.fecha }}</td>
+                <td>$ {{ detalle.registro.monto }}</td>
+                <td>{{ detalle.registro.nombre.dias_vencimiento }} Días</td>
+                <td>{{ detalle.dias_diferencia }}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 50px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    th {
+        background-color: #1257e0;
+        color: #fff;
+        text-align: center;
+    }
+    td {
+        text-align: right;
+    }
+    td:first-child {
+        text-align: left;
+    }
+    .header {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+    .header div {
+        margin: 5px 0;
+    }
+    .logo {
+        float: right;
+    }
+</style>
+{% endblock %}

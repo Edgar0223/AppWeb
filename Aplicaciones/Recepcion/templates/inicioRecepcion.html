@@ -1,0 +1,71 @@
+{% extends "./Recepcion.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Gestión de Recepción{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <!-- Title Section -->
+    <div class="row justify-content-center text-center">
+        <div class="col-lg-8">
+            <h1 class="display-4 font-weight-bold text-dark">Gestión de Recepción</h1>
+            <p class="lead text-muted">Gestiona la recepción de materiales y productos con eficiencia y precisión.</p>
+            <hr class="my-4">
+        </div>
+    </div>
+    
+    <!-- Features Section -->
+    <div class="row mt-5 text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{% static 'img/download-1.jpg' %}" width="30%" class="card-img-top rounded-top" alt="Recepción de Materiales">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Recepción de Materiales</h5>
+                    <p class="card-text text-muted">Verifica y registra todos los materiales recibidos para asegurar la calidad y cantidad.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{% static 'img/download-2.jpg' %}" width="30%" class="card-img-top rounded-top" alt="Control de Inventario">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Control de Inventario</h5>
+                    <p class="card-text text-muted">Gestiona el inventario para mantener un flujo constante de materiales y productos.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="{% static 'img/download-3.jpg' %}" width="30%" class="card-img-top rounded-top" alt="Logística y Distribución">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Logística y Distribución</h5>
+                    <p class="card-text text-muted">Optimiza la logística para una distribución eficiente y puntual de los productos.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Documentation and Processes Section -->
+    <div class="row mt-5">
+        <div class="col">
+            <h2 class="font-weight-bold text-dark">Documentos y Reportes</h2>
+            <div class="list-group list-group-flush">
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Reportes de Auditoría Interna</h5>
+                </div>
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Manuales de Calidad</h5>
+                </div>
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Procedimientos Operativos Estándar</h5>
+                </div>
+                <div class="list-group-item border-0 py-3">
+                    <h5 class="mb-1 text-dark">Registros de Control de Calidad</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

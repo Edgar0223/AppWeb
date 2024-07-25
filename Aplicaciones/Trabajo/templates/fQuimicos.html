@@ -1,0 +1,239 @@
+{% extends "./home.html" %}
+{% load static %}
+{% block title %}Kilos Liberados {% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/maquila.css' %}">
+{% endblock %}
+{% block body %}
+<img src="/static/img/a.png" alt="" width="100" height="60" align="right">
+
+<head>
+    <!-- links para exportar a excel -->
+    <script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+</head>
+
+<div class="row">
+    <div class="col-sm-11 col-md-5 col-lg-3 col-xl-3">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-dismissible alert-success" id="alert-message">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="text-dark">{{ message }}</strong>
+        </div>
+        <script>
+            setTimeout(function() {
+                document.getElementById('alert-message').style.display = 'none';
+            }, 5000); // Cierra el mensaje después de 5 segundos (5000 milisegundos)
+        </script>
+        {% endfor %}
+        {% endif %}
+        <h1></h1>
+        <br>
+        <div class="card">
+            <div class="card-body">
+                <form action="{% url 'kilosLiberados' %}" method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Cliente:</strong></label>
+                        <input type="text" id="cliente" name="cliente" class="form-control" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Producto:</strong></label>                        
+                        <select type="text" id="productos" name="productos" class="form-control"  required>
+                            {% for producs in producs %}
+                                <option value="{{ producs.id }}">{{ producs.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Lote del producto:</strong></label>
+                        <input type="text" id="lote" name="lote" class="form-control" placeholder="Lote" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Número de tarima:</strong></label>
+                        <input type="number" id="nTarima" name="nTarima" class="form-control" placeholder="# Tarima" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Lote de tarima:</strong></label>
+                        <input type="text" id="loTarima" name="loTarima" class="form-control" placeholder="Lote Tarima" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Cantidad:</strong></label>
+                        <input type="text" id="cantidad" name="cantidad" class="form-control" placeholder="Cantidad" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Kilos:</strong></label>
+                        <input type="text" id="kg" name="kg" class="form-control" placeholder="Kilos" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Kilos Netos:</strong></label>
+                        <input type="text" id="kgNetos" name="kgNetos" class="form-control" placeholder="Kilos netos" required>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Hora:</strong></label>
+                        <input type="time" id="hora"  name="hora" class="form-control" placeholder="kg de fruta" required readonly>
+                    </div>
+                    <div class="form-group py-2">
+                        <label for="nombre"><strong>Fecha:</strong></label>
+                        <input type="date" id="fecha" name="fecha" class="form-control" placeholder="Fecha" maxlength="50" value="{{ date.today }}" readonly required>
+                    </div>
+                    <div class="form-group py-2">
+                        <button type="submit" class="btn btn-primary btn-block ext-white">Guardar</button>
+                    </div>
+                    <!-- Aquí estaba el formulario para agregar nuevos registros -->
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-13 col-md-7 col-lg-9 col-xl-9">
+                      
+        <h1>Kilos liberados</h1>
+        <button id="btnExportar" class="btn btn-success"><i class="fas fa-file-excel"></i> Exportar Excel</button>
+        
+        <!-- Eliminamos el formulario de impresión y agregamos el botón de imprimir -->
+        <button id="btnImprimir" class="btn btn-primary"><i class="fas fa-print"></i> </button>
+        
+        <div class="table-responsive py-2">
+            <table class="table table-dark  table-striped" id="tabla">
+                <thead>
+                    <tr class="table-primary">
+                        <!-- Agregamos una columna para los checkboxes -->
+                        <th></th>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>Lote</th>
+                        <th>#Tarima</th>
+                        <th>Lo.Tarima</th>
+                        <th>Cantidad</th>
+                        <th>Kilos</th>
+                        <th>Kg. Netos</th>   
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fis in fis %}
+                    <tr>
+                        <!-- Agregamos un checkbox a cada fila -->
+                        <td><input type="checkbox" class="registroSeleccionado" value="{{ fis.id }}"></td>
+                        <td>{{ fis.id }}</td>
+                        <td>{{ fis.fecha|date:"d/m/Y" }}</td>
+                        <td>{{ fis.hora }}</td>
+                        <td>{{ fis.cliente }}</td>
+                        <td>{{ fis.productos.nombre }}</td>
+                        <td>{{ fis.lote }}</td>
+                        <td>{{ fis.nTarima }}</td>
+                        <td>{{ fis.loTarima }}</td>
+                        <td>{{ fis.cantidad }}</td>
+                        <td>{{ fis.kg }}</td>
+                        <td>{{ fis.kgNetos }}</td>   
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const $btnExportar = document.querySelector("#btnExportar");
+    const $btnImprimir = document.querySelector("#btnImprimir");
+    const $registrosSeleccionados = document.querySelectorAll(".registroSeleccionado");
+
+    $btnExportar.addEventListener("click", function() {
+        // Código para exportar la tabla a Excel
+        // ...
+    });
+
+    $btnImprimir.addEventListener("click", function() {
+        // Obtener los registros seleccionados
+        const movimientos_seleccionados = [];
+        $registrosSeleccionados.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                movimientos_seleccionados.push(checkbox.value);
+            }
+        });
+
+        // Crear un formulario dinámico para enviar los registros seleccionados
+        const $form = document.createElement("form");
+        $form.action = "{% url 'imprimir' %}";
+        $form.method = "post";
+        $form.style.display = "none"; // Ocultar el formulario
+        
+        // Agregar el token CSRF
+        const $csrfInput = document.createElement("input");
+        $csrfInput.type = "hidden";
+        $csrfInput.name = "csrfmiddlewaretoken";
+        $csrfInput.value = "{{ csrf_token }}";
+        $form.appendChild($csrfInput);
+
+        // Agregar los IDs de los registros seleccionados como inputs ocultos
+        movimientos_seleccionados.forEach(function(movimiento_id) {
+            const $input = document.createElement("input");
+            $input.type = "hidden";
+            $input.name = "movimientos_seleccionados";
+            $input.value = movimiento_id;
+            $form.appendChild($input);
+        });
+
+        // Agregar el formulario al cuerpo del documento y enviarlo
+        document.body.appendChild($form);
+        $form.submit();
+    });
+</script>
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border-radius: 10px; /* Ajusta este valor según prefieras */
+        overflow: hidden; /* Esto asegura que los bordes redondeados se muestren correctamente */
+        background-color: #525151;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        border: 1px solid #fff;
+        text-align: center;
+        
+    }
+
+    .table th {
+        background-color: #E05012;
+        color: #000000;
+        
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #000000;
+        border-radius: 15px;
+
+    }
+</style>
+
+<script>
+    // Obtener la fecha actual
+    var today = new Date();
+    var day = today.getDate();
+    var month = today.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
+    var year = today.getFullYear();
+
+    // Obtener la hora actual
+    var hours = today.getHours();
+    var minutes = today.getMinutes();
+
+    // Formatear la fecha y hora actual
+    var formattedDate = year + '-' + month.toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+    var formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
+
+    // Establecer la fecha y hora actual en el campo de horaEnvio
+    document.getElementById("fecha").value = formattedDate;
+    document.getElementById("hora").value = formattedTime;
+</script>
+{% endblock %}
