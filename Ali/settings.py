@@ -70,11 +70,11 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 ] 
 CORS_ALLOWED_ORIGINS = [
-    'https://alifrutdigitalwork.azurewebsites.net',
+    'https://alifrutdigital.azurewebsites.net',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://alifrutdigitalwork.azurewebsites.net',
+    'https://alifrutdigital.azurewebsites.net',
 ]
 
 MIDDLEWARE = [
