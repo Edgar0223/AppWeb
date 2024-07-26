@@ -24,10 +24,10 @@ MESSAGE_TAGS = {
 }
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 MEDIA_URL = '/media/'
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = BASE_DIR / "media"  # Ajusta la ruta según la estructura de tu proyecto
 PROTECTED_VIEW_PASSWORD = 'Bared664'
 
@@ -166,6 +166,7 @@ STATICFILES_DIRS = [
     "Aplicaciones/Produccion/static",
     "Aplicaciones/Recepcion/static",
     ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
