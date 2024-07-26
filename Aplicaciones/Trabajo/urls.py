@@ -166,6 +166,4 @@ urlpatterns = [
     path('registrarDevolucion/', views.registrarDevolucion, name='registrarDevolucion'),
     path('registrar_lavado/', views.registrar_lavado, name='registrar_lavado'),
 
-]
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -28,7 +28,7 @@ MESSAGE_TAGS = {
 
 MEDIA_URL = '/media/'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MEDIA_ROOT = BASE_DIR / "media"  # Ajusta la ruta según la estructura de tu proyecto
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Ajusta la ruta según la estructura de tu proyecto
 PROTECTED_VIEW_PASSWORD = 'Bared664'
 
 CRONJOBS = [
@@ -159,13 +159,15 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [ 
-    'Aplicaciones/Trabajo/static',
-    "Aplicaciones/cuentas/static",
-    "Aplicaciones/Calidad/static", 
-    "Aplicaciones/Produccion/static",
-    "Aplicaciones/Recepcion/static",
-    ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'Aplicaciones/Trabajo/static'),
+    os.path.join(BASE_DIR, 'Aplicaciones/cuentas/static'),
+    os.path.join(BASE_DIR, 'Aplicaciones/Calidad/static'),
+    os.path.join(BASE_DIR, 'Aplicaciones/Produccion/static'),
+    os.path.join(BASE_DIR, 'Aplicaciones/Recepcion/static'),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
